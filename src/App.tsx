@@ -1,80 +1,71 @@
+import {KIND} from "baseui/button";
 import {SIZE} from "baseui/input";
-import {PinCode} from "baseui/pin-code";
+import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE} from "baseui/modal";
 import React, {useState} from 'react';
-import {Row} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import SignaturePage from "./SignaturePage";
+import PinPage from "./PinPage";
 import './styles/neumorphism.css';
 
 function App() {
     const defaultPinValues = [" ", " ", " ", " ", " "];
-    const [values, setValues] = useState(defaultPinValues);
+    const [pinValues, setPinValues] = useState(defaultPinValues);
+    const [isOpen, setIsOpen] = useState(false);
+    const clientName = 'Arthur Frankel';
 
-    const reset = () => {
-        setValues(defaultPinValues);
-        const pinEntry = document.getElementById('pin-entry-0');
-        if (pinEntry) {
-            pinEntry.focus();
-        }
+    const handleModalClose = (signature: string | null) => {
+      if (signature) alert('todo: handle signature - ' + signature);
+      setIsOpen(false);
+      window.location.reload();
     }
 
-    const clientName = 'Arthur Frankel';
-    const today = new Date().toLocaleString();
-
     return (
+        <>
         <Form className="neu-main">
             <div className="neu-content">
-                {values.includes(' ') || values.join('') !== '12345' ?
+                {pinValues.includes(' ') || pinValues.join('') !== '12345' ?
                     (
-                        <div className="pin">
-                            <Row className="neu-field text">
-                                Enter the 5-digit PIN
-                            </Row>
-                            <Row className='is-invalid'>
-                                <PinCode
-                                    id="pin-entry"
-                                    autoFocus
-                                    onChange={({values}) => setValues(values)}
-                                    values={values}
-                                    size={SIZE.large}
-                                />
-                                <div className="invalid-feedback">First name can not be blank.</div>
-                            </Row>
-
-                            <Row>
-                                <button onClick={() => reset()} className="mt-4 neu-button">Reset</button>
-                            </Row>
-                        </div>
+                        <PinPage
+                            onChange={(values) => setPinValues(values)}
+                            defaultPinValues={defaultPinValues}
+                        />
                     ) : (
-                        <Row className="signature">
-                            <p className="text">
-                                I, {clientName} as a resident of Switchpoint, I declare that I am leaving for the day
-                                and
-                                verify that I
-                                have a prescription medication dose that needs to be administered during this time.
-                                <br/>
-                                I take full responsibility for my medication while I am away from the Switchpoint
-                                facility and
-                                attest that staff gave me my prescription medication for this purpose and this purpose
-                                alone.
-                                <br/>
-                                I am fully aware that if I return to the property and do not immediately turn my
-                                prescription
-                                medications back in to the front office, I can be detained and arrested by the police.
-                                <br/>
-                                <br/>
-                                <span className="mt-3">
-                                    Signature:
-                                    <button className="neu-button" onClick={() => alert('todo: show sig pad')}>
-                                        Click to sign
-                                    </button>
-                                </span>{' '}
-                                <span className="ml-3">Date: {today}</span>
-                            </p>
-                        </Row>
+                        <SignaturePage
+                            clientName={clientName}
+                            onShowSignatureModal={() => setIsOpen(true)}
+                        />
                     )}
             </div>
         </Form>
-    );
-}
+
+
+            <Modal
+                onClose={() => handleModalClose(null)}
+                closeable
+                isOpen={isOpen}
+                animate
+                autoFocus
+                size={SIZE.default}
+                role={ROLE.dialog}
+                unstable_ModalBackdropScroll={true}
+            >
+                <ModalHeader>Hello world</ModalHeader>
+                <ModalBody>
+                    Proin ut dui sed metus pharetra hend rerit vel non
+                    mi. Nulla ornare faucibus ex, non facilisis nisl.
+                    Maecenas aliquet mauris ut tempus.
+                </ModalBody>
+                <ModalFooter>
+                    <ModalButton kind={KIND.secondary} onClick={() => handleModalClose(null)}>
+                        Reset
+                    </ModalButton>
+                    <ModalButton kind={KIND.primary} onClick={() => handleModalClose('my signature')}>
+                        Accept
+                    </ModalButton>
+                </ModalFooter>
+            </Modal>
+        </>
+
+)}
 
 export default App;

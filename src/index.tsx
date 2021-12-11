@@ -1,12 +1,10 @@
+import {BaseProvider, LightTheme} from 'baseui';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Client as Styletron} from "styletron-engine-atomic";
+import {Provider as StyletronProvider} from "styletron-react";
 import App from './App';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {BaseProvider, LightTheme} from 'baseui';
-// @ts-ignore
-import { Provider as StyletronProvider } from "styletron-react";
-// @ts-ignore
-import { Client as Styletron } from "styletron-engine-atomic";
 
 const engine = new Styletron();
 
