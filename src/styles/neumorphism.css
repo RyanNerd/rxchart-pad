@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+.neu-main {
+    display: grid;
+    place-items: center;
+    text-align: center;
+    background: #dde1e7;
+    margin-left: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.neu-content .pin {
+    background: #dde1e7;
+    border-radius: 10px;
+    padding: 40px 30px;
+    box-shadow: -3px -3px 7px #ffffff73, 2px 2px 5px rgba(94, 104, 121, 0.288);
+    margin: 55px 50% 175% 0;
+    width: 350px;
+}
+
+.neu-content .signature {
+    background: #dde1e7;
+    border-radius: 10px;
+    padding: 40px 30px;
+    box-shadow: -3px -3px 7px #ffffff73, 2px 2px 5px rgba(94, 104, 121, 0.288);
+
+    margin-top: 50px;
+    margin-bottom: 25%!important;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+.neu-content .text {
+    font-size: 25px;
+    font-weight: 300;
+    text-align: left;
+    color: #000;
+}
+
+.neu-content .neu-field {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    position: relative;
+}
+
+/*noinspection CssUnusedSymbol*/
+.neu-button {
+    margin-left: 10px;
+    width: 150px;
+    height: 50px;
+    color: #000;
+    font-size: 18px;
+    font-weight: 600;
+    background: #dde1e7;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 25px;
+    box-shadow: 2px 2px 5px #babecc, -5px -5px 10px #ffffff73;
+}
+
+.neu-button:focus {
+    color: #3498db;
+    box-shadow: inset 2px 2px 5px #babecc,
+    inset -5px -5px 10px #ffffff73;
+}
+
+.neu-button:disabled {
+    color: #babecc;
+    cursor: default;
+}
