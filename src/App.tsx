@@ -17,8 +17,8 @@ const App = () => {
      * This fires when the user closes the signature modal
      * @param {boolean} signature True if user accepted the signature, false otherwise.
      */
-    const handleModalClose = (signature: string | null | unknown) => {
-        if (signature) alert('todo: handle signature - ' + signature);
+    const handleModalClose = (signature: string | null) => {
+        if (signature) alert('todo: handle signature - ' + JSON.stringify(signature));
         setIsOpen(false);
         window.location.reload();
     };
@@ -35,7 +35,7 @@ const App = () => {
                 </div>
             </div>
 
-            <SignaturePad show={isOpen} onClose={(canvas) => handleModalClose(canvas)} />
+            <SignaturePad show={isOpen} onClose={(imgPngString) => handleModalClose(imgPngString)} />
         </>
     );
 };
