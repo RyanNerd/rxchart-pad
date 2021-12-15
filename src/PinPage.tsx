@@ -1,6 +1,7 @@
 import {SIZE} from "baseui/input";
+import {KIND, Notification} from "baseui/notification"
 import {PinCode} from "baseui/pin-code";
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 interface IProps {
     defaultPinValues: string[];
@@ -8,10 +9,17 @@ interface IProps {
 }
 
 const PinPage = (props: IProps) => {
-    const [values, setValues] = useState(props.defaultPinValues);
+    const [pinValues, setPinValues] = useState(props.defaultPinValues);
+    const resetRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        if ((!pinValues.includes(' ') && pinValues.join('') !== '12345')) {
+            resetRef?.current?.focus();
+        }
+    })
 
    const reset = () => {
-        setValues(props.defaultPinValues);
+        setPinValues(props.defaultPinValues);
         const pinEntry = document.getElementById('pin-entry-0');
         if (pinEntry) {
             pinEntry.focus();
@@ -19,34 +27,44 @@ const PinPage = (props: IProps) => {
     }
 
     const handleOnChange = (pinValues: string[]) => {
-        setValues(pinValues);
+        setPinValues(pinValues);
         props.onChange(pinValues);
     }
 
+
     return (
         <div className="pin">
-            <div className="neu-field text">
+            <div className="neu-field text px-4">
                 Enter the 5-digit PIN
             </div>
-            <div className='is-invalid'>
+
+            <div>
                 <PinCode
                     id="pin-entry"
                     autoFocus
                     onChange={({values}) => handleOnChange(values)}
-                    values={values}
+                    values={pinValues}
                     size={SIZE.large}
                 />
-                <div className="invalid-feedback">First name can not be blank.</div>
-            </div>
+                {(!pinValues.includes(' ') && pinValues.join('') !== '12345') &&
+                    <>
+                    <Notification kind={KIND.warning}>
+                        PIN is invalid. Reset and try again.
+                    </Notification>
 
-            <div>
-                <button
-                    onClick={() => reset()}
-                    className="neu-button"
-                    style={{marginTop: "1.5rem"}}
-                >
-                    Reset
-                </button>
+                    <button
+                        id="reset-pin"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            reset();
+                        }}
+                        ref={resetRef}
+                        className="neu-button mt-3"
+                    >
+                        Reset
+                    </button>
+                    </>
+                }
             </div>
         </div>
     )

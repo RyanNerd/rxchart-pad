@@ -1,4 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
+:root {
+    --spacer: 1.5;
+}
+
 .neu-main {
     display: grid;
     place-items: center;
@@ -31,10 +36,16 @@
     width: 80%;
 }
 
+.neu-content .signature p {
+    font-size: 25px;
+    font-weight: 300;
+    color: #000;
+    text-align: left;
+}
+
 .neu-content .text {
     font-size: 25px;
     font-weight: 300;
-    text-align: left;
     color: #000;
 }
 
@@ -70,4 +81,152 @@
 .neu-button:disabled {
     color: #babecc;
     cursor: default;
+}
+
+/* Utility CSS */
+.mt-0 {
+    margin-top: 0!important;
+}
+.mt-1 {
+    margin-top: calc(var(--spacer) * .25rem)!important;
+}
+.mt-2 {
+    margin-top: calc(var(--spacer) * .5rem)!important;
+}
+.mt-3 {
+    margin-top: calc(var(--spacer) * 1rem)!important;
+}
+.mt-4 {
+    margin-top: calc(var(--spacer) * 1.5rem)!important;
+}
+.mt-5 {
+    margin-top: calc(var(--spacer) * 3rem)!important;
+}
+
+.ml-0 {
+    margin-left: 0!important;
+}
+.ml-1 {
+    margin-left: calc(var(--spacer) * .25rem)!important;
+}
+.ml-2 {
+    margin-left: calc(var(--spacer) * .5rem)!important;
+}
+.ml-3 {
+    margin-left: calc(var(--spacer) * 1rem)!important;
+}
+.ml-4 {
+    margin-left: calc(var(--spacer) * 1.5rem)!important;
+}
+.ml-5 {
+    margin-left: calc(var(--spacer) * 3rem)!important;
+}
+
+.mr-0 {
+    margin-right: 0!important;
+}
+.mr-1 {
+    margin-right: calc(var(--spacer) * .25rem)!important;
+}
+.mr-2 {
+    margin-right: calc(var(--spacer) * .5rem)!important;
+}
+.mr-3 {
+    margin-right: calc(var(--spacer) * 1rem)!important;
+}
+.mr-4 {
+    margin-right: calc(var(--spacer) * 1.5rem)!important;
+}
+.mr-5 {
+    margin-right: calc(var(--spacer) * 3rem)!important;
+}
+
+.mb-0 {
+    margin-bottom: 0!important;
+}
+.mb-1 {
+    margin-bottom: calc(var(--spacer) * .25rem)!important;
+}
+.mb-2 {
+    margin-bottom: calc(var(--spacer) * .5rem)!important;
+}
+.mb-3 {
+    margin-bottom: calc(var(--spacer) * 1rem)!important;
+}
+.mb-4 {
+    margin-bottom: calc(var(--spacer) * 1.5rem)!important;
+}
+.mb-5 {
+    margin-bottom: calc(var(--spacer) * 3rem)!important;
+}
+
+.p-0 {
+    padding: 0!important;
+}
+.p-1 {
+    padding: calc(var(--spacer) * .25rem)!important;
+}
+.p-2 {
+    padding: calc(var(--spacer) * .5rem)!important;
+}
+.p-3 {
+    padding: calc(var(--spacer) * 1rem)!important;
+}
+.p-4 {
+    padding: calc(var(--spacer) * 1.5rem)!important;
+}
+.p-5 {
+    padding: calc(var(--spacer) * 3rem)!important;
+}
+
+.px-0 {
+    padding-left: 0!important;
+    padding-right: 0!important;
+}
+.px-1 {
+    padding-left: calc(var(--spacer) * .25rem)!important;
+    padding-right: calc(var(--spacer) * .25rem)!important;
+}
+.px-2 {
+    padding-left: calc(var(--spacer) * .5rem)!important;
+    padding-right: calc(var(--spacer) * .5rem)!important;
+}
+.px-3 {
+    padding-left: calc(var(--spacer) * 1rem)!important;
+    padding-right: calc(var(--spacer) * 1rem)!important;
+}
+.px-4 {
+    padding-left: calc(var(--spacer) * 1.5rem)!important;
+    padding-right: calc(var(--spacer) * 1.5rem)!important;
+
+}
+.px-5 {
+    padding-left: calc(var(--spacer) * 3rem)!important;
+    padding-right: calc(var(--spacer) * 3rem)!important;
+}
+
+.py-0 {
+    padding-top: 0!important;
+    padding-bottom: 0!important;
+}
+.py-1 {
+    padding-top: calc(var(--spacer) * .25rem)!important;
+    padding-bottom: calc(var(--spacer) * .25rem)!important;
+}
+.py-2 {
+    padding-top: calc(var(--spacer) * .5rem)!important;
+    padding-bottom: calc(var(--spacer) * .5rem)!important;
+}
+.py-3 {
+    padding-top: calc(var(--spacer) * 1rem)!important;
+    padding-bottom: calc(var(--spacer) * 1rem)!important;
+}
+.py-4 {
+    padding-top: calc(var(--spacer) * 1.5rem)!important;
+    padding-bottom: calc(var(--spacer) * 1.5rem)!important;
+
+}
+.py-5 {
+    padding-top: calc(var(--spacer) * 3rem)!important;
+    padding-bottom: calc(var(--spacer) * 3rem)!important;
 }

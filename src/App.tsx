@@ -2,8 +2,8 @@ import {KIND} from "baseui/button";
 import {SIZE} from "baseui/input";
 import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE} from "baseui/modal";
 import React, {useState} from 'react';
-import SignaturePage from "./SignaturePage";
 import PinPage from "./PinPage";
+import SignaturePage from "./SignaturePage";
 import './styles/neumorphism.css';
 
 function App() {
@@ -64,7 +64,6 @@ function App() {
                 </ModalFooter>
             </Modal>
         </>
-
 )}
 
 export default App;
