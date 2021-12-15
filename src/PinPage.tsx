@@ -1,7 +1,6 @@
 import {SIZE} from "baseui/input";
 import {PinCode} from "baseui/pin-code";
 import React, {useState} from "react";
-import {Row} from "react-bootstrap";
 
 interface IProps {
     defaultPinValues: string[];
@@ -26,10 +25,10 @@ const PinPage = (props: IProps) => {
 
     return (
         <div className="pin">
-            <Row className="neu-field text">
+            <div className="neu-field text">
                 Enter the 5-digit PIN
-            </Row>
-            <Row className='is-invalid'>
+            </div>
+            <div className='is-invalid'>
                 <PinCode
                     id="pin-entry"
                     autoFocus
@@ -38,11 +37,17 @@ const PinPage = (props: IProps) => {
                     size={SIZE.large}
                 />
                 <div className="invalid-feedback">First name can not be blank.</div>
-            </Row>
+            </div>
 
-            <Row>
-                <button onClick={() => reset()} className="mt-4 neu-button">Reset</button>
-            </Row>
+            <div>
+                <button
+                    onClick={() => reset()}
+                    className="neu-button"
+                    style={{marginTop: "1.5rem"}}
+                >
+                    Reset
+                </button>
+            </div>
         </div>
     )
 }

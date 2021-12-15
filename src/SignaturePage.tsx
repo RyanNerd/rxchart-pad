@@ -1,5 +1,4 @@
 import React from "react";
-import {Row} from "react-bootstrap";
 
 interface IProps {
     clientName: string;
@@ -9,7 +8,7 @@ interface IProps {
 const SignaturePage = (props: IProps) => {
     const today = new Date().toLocaleString();
     return (
-        <Row className="signature">
+        <div className="signature">
             <p className="text">
                 I, {props.clientName} as a resident of Switchpoint, I declare that I am leaving for the day
                 and
@@ -37,7 +36,7 @@ const SignaturePage = (props: IProps) => {
                                 </span>{' '}
                 <span className="ml-3">Date: {today}</span>
             </p>
-        </Row>
+        </div>
     )
 }
 

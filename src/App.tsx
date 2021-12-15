@@ -2,7 +2,6 @@ import {KIND} from "baseui/button";
 import {SIZE} from "baseui/input";
 import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE} from "baseui/modal";
 import React, {useState} from 'react';
-import Form from "react-bootstrap/Form";
 import SignaturePage from "./SignaturePage";
 import PinPage from "./PinPage";
 import './styles/neumorphism.css';
@@ -21,7 +20,7 @@ function App() {
 
     return (
         <>
-        <Form className="neu-main">
+        <div className="neu-main">
             <div className="neu-content">
                 {pinValues.includes(' ') || pinValues.join('') !== '12345' ?
                     (
@@ -36,7 +35,7 @@ function App() {
                         />
                     )}
             </div>
-        </Form>
+        </div>
 
 
             <Modal

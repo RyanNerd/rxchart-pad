@@ -1,5 +1,4 @@
 import {BaseProvider, LightTheme} from 'baseui';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Client as Styletron} from "styletron-engine-atomic";
