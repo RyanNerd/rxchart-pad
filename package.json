@@ -1,50 +1,69 @@
 {
-  "name": "rxchart-pad",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "baseui": "^10.6.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3",
-    "styletron-engine-atomic": "latest",
-    "styletron-react": "latest",
-    "typescript": "^4.5.3"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
-    "@types/jest": "^26.0.24",
-    "@types/node": "^12.20.37",
-    "@types/react": "^17.0.37",
-    "@types/react-dom": "^17.0.11",
-    "@types/styletron-engine-atomic": "^1.1.1",
-    "@types/styletron-react": "^5.0.3"
-  },
-  "scripts": {
-    "install": "npm install --legacy-peer-deps",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+    "name": "rxchart-pad",
+    "version": "0.1.0",
+    "private": false,
+    "dependencies": {
+        "baseui": "^10.6.0",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "react-scripts": "4.0.3",
+        "styletron-engine-atomic": "latest",
+        "styletron-react": "latest",
+        "typescript": "^4.5.3"
+    },
+    "devDependencies": {
+        "@testing-library/jest-dom": "^5.16.1",
+        "@testing-library/react": "^11.2.7",
+        "@testing-library/user-event": "^12.8.3",
+        "@types/jest": "^26.0.24",
+        "@types/node": "^12.20.37",
+        "@types/react": "^17.0.37",
+        "@types/react-dom": "^17.0.11",
+        "@types/styletron-engine-atomic": "^1.1.1",
+        "@types/styletron-react": "^5.0.3",
+        "@typescript-eslint/eslint-plugin": "^5.1.0",
+        "@typescript-eslint/parser": "^5.1.0",
+        "eslint": "^7.11.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-jsdoc": "^36.1.1",
+        "eslint-plugin-prefer-arrow": "^1.2.3",
+        "eslint-plugin-react": "^7.26.1",
+        "eslint-plugin-react-hooks": "^4.2.0",
+        "prettier": "^2.4.1"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
+    },
+    "prettier": {
+        "$schema": "https://json.schemastore.org/prettierrc",
+        "printWidth": 120,
+        "trailingComma": "none",
+        "bracketSameLine": false,
+        "jsxBracketSameLine": false,
+        "singleQuote": true,
+        "tabWidth": 4,
+        "bracketSpacing": false,
+        "endOfLine": "lf",
+        "arrowParens:": "always"
+    }
 }

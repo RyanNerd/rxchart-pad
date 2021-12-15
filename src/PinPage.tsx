@@ -1,42 +1,50 @@
-import {SIZE} from "baseui/input";
-import {KIND, Notification} from "baseui/notification"
-import {PinCode} from "baseui/pin-code";
-import React, {useEffect, useRef, useState} from "react";
+import {SIZE} from 'baseui/input';
+import {KIND, Notification} from 'baseui/notification';
+import {PinCode} from 'baseui/pin-code';
+import React, {useEffect, useRef, useState} from 'react';
 
 interface IProps {
     defaultPinValues: string[];
     onChange: (pin: string[]) => void;
 }
 
+/**
+ * PIN Page
+ * @param {IProps} props The props for this component
+ */
 const PinPage = (props: IProps) => {
     const [pinValues, setPinValues] = useState(props.defaultPinValues);
     const resetRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
-        if ((!pinValues.includes(' ') && pinValues.join('') !== '12345')) {
+        if (!pinValues.includes(' ') && pinValues.join('') !== '12345') {
             resetRef?.current?.focus();
         }
-    })
+    });
 
-   const reset = () => {
+    /**
+     * Fires when the user clicks the Reset button
+     */
+    const reset = () => {
         setPinValues(props.defaultPinValues);
         const pinEntry = document.getElementById('pin-entry-0');
         if (pinEntry) {
             pinEntry.focus();
         }
-    }
+    };
 
+    /**
+     * Fires when the user enters a PIN value
+     * @param {string[]} pinValues The string of pin values as an array
+     */
     const handleOnChange = (pinValues: string[]) => {
         setPinValues(pinValues);
         props.onChange(pinValues);
-    }
-
+    };
 
     return (
         <div className="pin">
-            <div className="neu-field text px-4">
-                Enter the 5-digit PIN
-            </div>
+            <div className="neu-field text px-4">Enter the 5-digit PIN</div>
 
             <div>
                 <PinCode
@@ -46,28 +54,26 @@ const PinPage = (props: IProps) => {
                     values={pinValues}
                     size={SIZE.large}
                 />
-                {(!pinValues.includes(' ') && pinValues.join('') !== '12345') &&
+                {!pinValues.includes(' ') && pinValues.join('') !== '12345' && (
                     <>
-                    <Notification kind={KIND.warning}>
-                        PIN is invalid. Reset and try again.
-                    </Notification>
+                        <Notification kind={KIND.warning}>PIN is invalid. Reset and try again.</Notification>
 
-                    <button
-                        id="reset-pin"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            reset();
-                        }}
-                        ref={resetRef}
-                        className="neu-button mt-3"
-                    >
-                        Reset
-                    </button>
+                        <button
+                            id="reset-pin"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                reset();
+                            }}
+                            ref={resetRef}
+                            className="neu-button mt-3"
+                        >
+                            Reset
+                        </button>
                     </>
-                }
+                )}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default PinPage;
