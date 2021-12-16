@@ -48,7 +48,8 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build"
+        "build": "react-scripts build",
+        "changelog": "git log --graph --pretty=format:\"%C(yellow)%h%x09%Creset%C(cyan)%C(bold)%ad%Creset  %C(green)%Creset %s\" --date=short --output=/home/ryan/Projects/rxchart-pad/History.md"
     },
     "prettier": {
         "$schema": "https://json.schemastore.org/prettierrc",
