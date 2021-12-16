@@ -19,7 +19,9 @@ const SignaturePad = (props: IProps) => {
     useEffect(() => {
         setShowSignaturePad(props.show);
     }, [props.show]);
+
     const signatureRef = useRef<ReactSignatureCanvas>(null);
+    const [canAccept, setCanAccept] = useState(false);
 
     /**
      * Fires when the user clicks the accept button
@@ -51,13 +53,17 @@ const SignaturePad = (props: IProps) => {
                     canvasProps={{width: 800, height: 350, className: 'signature-canvas'}}
                     penColor="green"
                     ref={signatureRef}
+                    onBegin={()=> setCanAccept(true)}
                 />
             </ModalBody>
             <ModalFooter>
-                <ModalButton kind={KIND.secondary} onClick={() => signatureRef?.current?.clear()}>
+                <ModalButton kind={KIND.secondary} onClick={() => {
+                    signatureRef?.current?.clear()
+                    setCanAccept(false)
+                }}>
                     Clear
                 </ModalButton>
-                <ModalButton kind={KIND.primary} onClick={() => handleOnAccept()}>
+                <ModalButton kind={KIND.primary} onClick={() => handleOnAccept()} disabled={!canAccept}>
                     Accept
                 </ModalButton>
             </ModalFooter>
