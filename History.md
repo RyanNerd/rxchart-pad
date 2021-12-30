@@ -1,3 +1,6 @@
+* 2021-12-30   🌀 refactor Building out login modal
+* 2021-12-24   🌊 ci Removed support for IE when doing a production build
+* 2021-12-16   📓 docs Update History.md and include a script in package.json to produce the log 🧻
 * 2021-12-16   ⛲ feat Enable Accept button only if the user started writing a signature. Clear button now clears the signature canvas.
 * 2021-12-15   🐛 bug Fix 🔧 SignaturePad modal so that clicking off the modal doesn't close the modal
 * 2021-12-15   🌀 refactor Added SignatureCanvas 🖌 component and factored the modal into SignaturePad.tsx
