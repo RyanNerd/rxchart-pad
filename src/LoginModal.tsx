@@ -1,6 +1,8 @@
 import {KIND} from 'baseui/button';
 import {CLOSE_SOURCE, Modal, ModalBody, ModalButton, ModalHeader, ROLE, SIZE} from 'baseui/modal';
 import React, {useEffect, useState} from 'react';
+import {ReactComponent as UserIcon} from './icons/user.svg';
+import {ReactComponent as LockIcon} from './icons/lock.svg';
 import './styles/neumorphism.css';
 
 interface IProps {
@@ -10,15 +12,18 @@ interface IProps {
 
 const LoginModal = (props: IProps) => {
     const onClose = props.onClose;
-    const [showModal, setShowModal] = useState(props.show);
+    const [show, setShow] = useState(props.show);
     useEffect(() => {
-        setShowModal(props.show);
+        setShow(props.show);
     }, [props.show]);
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleLoginClick = () => {
         // TODO: Access login API to validate credentials and return the actual API key
         onClose('yyz-rush-is-awesome');
-        setShowModal(false);
+        setShow(false);
     };
 
     return (
@@ -26,7 +31,7 @@ const LoginModal = (props: IProps) => {
             animate
             autoFocus
             closeable
-            isOpen={showModal}
+            isOpen={show}
             onClose={(closeSource) => {
                 if (closeSource.closeSource !== CLOSE_SOURCE.backdrop) onClose(null);
             }}
@@ -34,13 +39,47 @@ const LoginModal = (props: IProps) => {
             size={SIZE.auto}
             unstable_ModalBackdropScroll={true}
         >
-            <ModalHeader>Login </ModalHeader>
-            <ModalBody>
-                <span>Login stuff</span>
-            </ModalBody>
-            <ModalButton kind={KIND.primary} onClick={() => handleLoginClick()}>
-                Login
-            </ModalButton>
+            <div className="neu-main">
+                <ModalHeader>Login </ModalHeader>
+            </div>
+            <div className="neu-main">
+                    <ModalBody>
+                        <div className="neu-main">
+                            <div className="neu-content-login">
+                                <div className="neu-field">
+                                    <UserIcon style={{marginTop: '12px', marginLeft: '15px'}} />
+                                    <input
+                                        autoFocus
+                                        onChange={(changeEvnet) => setUsername(changeEvnet.target.value)}
+                                        placeholder="Username"
+                                        required
+                                        type="text"
+                                        value={username}
+                                    />
+                                </div>
+
+                                <div className="neu-field">
+                                    <LockIcon style={{marginTop: '12px', marginLeft: "15px"}} />
+                                    <input
+                                        onChange={(changeEvent) => setPassword(changeEvent.target.value)}
+                                        onKeyUp={(keyboardEvent: React.KeyboardEvent<HTMLElement>) => {
+                                            if (keyboardEvent.key === 'Enter') handleLoginClick();
+                                        }}
+                                        placeholder="Password"
+                                        type="password"
+                                        value={password}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </ModalBody>
+            </div>
+            <div className="neu-main">
+
+                    <ModalButton kind={KIND.secondary} onClick={() => handleLoginClick()}>
+                        Login
+                    </ModalButton>
+            </div>
         </Modal>
     );
 };
