@@ -1,9 +1,7 @@
-import {KIND} from 'baseui/button';
-import {CLOSE_SOURCE, Modal, ModalBody, ModalButton, ModalHeader, ROLE, SIZE} from 'baseui/modal';
+import {CLOSE_SOURCE, Modal, ModalBody, ModalHeader, ROLE, SIZE} from 'baseui/modal';
 import React, {useEffect, useState} from 'react';
-import {ReactComponent as UserIcon} from './icons/user.svg';
 import {ReactComponent as LockIcon} from './icons/lock.svg';
-import './styles/neumorphism.css';
+import {ReactComponent as UserIcon} from './icons/user.svg';
 
 interface IProps {
     show: boolean;
@@ -40,45 +38,44 @@ const LoginModal = (props: IProps) => {
             unstable_ModalBackdropScroll={true}
         >
             <div className="neu-main">
-                <ModalHeader>Login </ModalHeader>
+                <ModalHeader><h2>Login</h2> </ModalHeader>
             </div>
             <div className="neu-main">
-                    <ModalBody>
-                        <div className="neu-main">
-                            <div className="neu-content-login">
-                                <div className="neu-field">
-                                    <UserIcon style={{marginTop: '12px', marginLeft: '15px'}} />
-                                    <input
-                                        autoFocus
-                                        onChange={(changeEvnet) => setUsername(changeEvnet.target.value)}
-                                        placeholder="Username"
-                                        required
-                                        type="text"
-                                        value={username}
-                                    />
-                                </div>
+                <ModalBody>
+                    <div className="neu-main">
+                        <div className="neu-content-login">
+                            <div className="neu-field">
+                                <UserIcon style={{marginTop: '12px', marginLeft: '15px'}} />
+                                <input
+                                    autoFocus
+                                    onChange={(changeEvnet) => setUsername(changeEvnet.target.value)}
+                                    placeholder="Username"
+                                    required
+                                    type="text"
+                                    value={username}
+                                />
+                            </div>
 
-                                <div className="neu-field">
-                                    <LockIcon style={{marginTop: '12px', marginLeft: "15px"}} />
-                                    <input
-                                        onChange={(changeEvent) => setPassword(changeEvent.target.value)}
-                                        onKeyUp={(keyboardEvent: React.KeyboardEvent<HTMLElement>) => {
-                                            if (keyboardEvent.key === 'Enter') handleLoginClick();
-                                        }}
-                                        placeholder="Password"
-                                        type="password"
-                                        value={password}
-                                    />
-                                </div>
+                            <div className="neu-field">
+                                <LockIcon style={{marginTop: '12px', marginLeft: '15px'}} />
+                                <input
+                                    onChange={(changeEvent) => setPassword(changeEvent.target.value)}
+                                    onKeyUp={(keyboardEvent: React.KeyboardEvent<HTMLElement>) => {
+                                        if (keyboardEvent.key === 'Enter') handleLoginClick();
+                                    }}
+                                    placeholder="Password"
+                                    type="password"
+                                    value={password}
+                                />
                             </div>
                         </div>
-                    </ModalBody>
+                    </div>
+                </ModalBody>
             </div>
             <div className="neu-main">
-
-                    <ModalButton kind={KIND.secondary} onClick={() => handleLoginClick()}>
-                        Login
-                    </ModalButton>
+                <button className="neu-button mb-3" onClick={() => handleLoginClick()}>
+                    Login
+                </button>
             </div>
         </Modal>
     );
