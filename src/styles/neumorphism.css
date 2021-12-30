@@ -103,6 +103,13 @@
     color: #595959;
 }
 
+.neu-field h3 {
+    position: absolute;
+    width: 50px;
+    line-height: 50px;
+    color: #595959;
+}
+
 .neu-field svg {
     position: absolute;
     width: 20px;

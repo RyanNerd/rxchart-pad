@@ -38,7 +38,7 @@ const LoginModal = (props: IProps) => {
             unstable_ModalBackdropScroll={true}
         >
             <div className="neu-main">
-                <ModalHeader><h2>Login</h2> </ModalHeader>
+                <ModalHeader><h2 className="neu-field">Login</h2> </ModalHeader>
             </div>
             <div className="neu-main">
                 <ModalBody>
