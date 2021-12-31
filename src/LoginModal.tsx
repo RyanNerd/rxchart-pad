@@ -1,14 +1,17 @@
 import {CLOSE_SOURCE, Modal, ModalBody, ModalHeader, ROLE, SIZE} from 'baseui/modal';
+import {IAuthManager} from "managers/authManager";
 import React, {useEffect, useState} from 'react';
 import {ReactComponent as LockIcon} from './icons/lock.svg';
 import {ReactComponent as UserIcon} from './icons/user.svg';
 
 interface IProps {
+    authenticationManager: IAuthManager;
     show: boolean;
     onClose: (apiKey: string | null) => void;
 }
 
 const LoginModal = (props: IProps) => {
+    const am = props.authenticationManager;
     const onClose = props.onClose;
     const [show, setShow] = useState(props.show);
     useEffect(() => {
@@ -18,10 +21,21 @@ const LoginModal = (props: IProps) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    /**
+     * Fires when the user clicks on the login button
+     */
     const handleLoginClick = () => {
-        // TODO: Access login API to validate credentials and return the actual API key
-        onClose('yyz-rush-is-awesome');
-        setShow(false);
+        const validateCredentials = async () => {
+            const auth = await am.authenticate(username, password);
+            if (auth.success) {
+                onClose(auth.apiKey);
+                setShow(false);
+            } else {
+                // TODO: Build out actual alert
+                alert('Username or password is incorrect');
+            }
+        }
+        validateCredentials();
     };
 
     return (
@@ -48,7 +62,7 @@ const LoginModal = (props: IProps) => {
                                 <UserIcon style={{marginTop: '12px', marginLeft: '15px'}} />
                                 <input
                                     autoFocus
-                                    onChange={(changeEvnet) => setUsername(changeEvnet.target.value)}
+                                    onChange={(changeEvent) => setUsername(changeEvent.target.value)}
                                     placeholder="Username"
                                     required
                                     type="text"

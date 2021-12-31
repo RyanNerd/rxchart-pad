@@ -1,11 +1,11 @@
 import {SIZE} from 'baseui/input';
 import {KIND, Notification} from 'baseui/notification';
 import {PinCode} from 'baseui/pin-code';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 interface IProps {
-    defaultPinValues: string[];
-    onChange: (pin: string[]) => void;
+    pinValues: string[];
+    onPinEntered: (pin: string[]) => void;
 }
 
 /**
@@ -13,20 +13,16 @@ interface IProps {
  * @param {IProps} props The props for this component
  */
 const PinPage = (props: IProps) => {
-    const [pinValues, setPinValues] = useState(props.defaultPinValues);
-    const resetRef = useRef<HTMLButtonElement>(null);
-
+    const [pinValues, setPinValues] = useState(props.pinValues);
     useEffect(() => {
-        if (!pinValues.includes(' ') && pinValues.join('') !== '12345') {
-            resetRef?.current?.focus();
-        }
-    });
+        setPinValues(props.pinValues);
+    },[props.pinValues])
 
     /**
      * Fires when the user clicks the Reset button
      */
     const reset = () => {
-        setPinValues(props.defaultPinValues);
+        setPinValues([' ', ' ', ' ', ' ', ' ']);
         const pinEntry = document.getElementById('pin-entry-0');
         if (pinEntry) {
             pinEntry.focus();
@@ -39,7 +35,11 @@ const PinPage = (props: IProps) => {
      */
     const handleOnChange = (pinValues: string[]) => {
         setPinValues(pinValues);
-        props.onChange(pinValues);
+        if (!pinValues.includes(' ')) {
+            if (pinValues.join('') === '12345') {
+                props.onPinEntered(pinValues);
+            }
+        }
     };
 
     return (
@@ -64,7 +64,6 @@ const PinPage = (props: IProps) => {
                                 e.preventDefault();
                                 reset();
                             }}
-                            ref={resetRef}
                             className="neu-button mt-3"
                         >
                             Reset

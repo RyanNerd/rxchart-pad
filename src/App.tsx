@@ -1,18 +1,24 @@
 import LoginModal from 'LoginModal';
+import {IAuthManager} from "managers/authManager";
 import React, {useState} from 'react';
 import SignaturePad from 'SignaturePad';
 import PinPage from './PinPage';
 import SignaturePage from './SignaturePage';
 import './styles/neumorphism.css';
 
+interface IProps {
+    authenticationManager: IAuthManager;
+}
 /**
  * App entry point
+ * @param {IProps} props The props for this component
  */
-const App = () => {
+const App = (props: IProps) => {
+    const am = props.authenticationManager;
     const clientName = 'Arthur Frankel';
-    const defaultPinValues = [' ', ' ', ' ', ' ', ' '];
+    const defaultPinValues = [' ', ' ', ' ', ' ', ' '] as Readonly<string[]>;
     const [isSignaturePadOpen, setIsSignaturePadOpen] = useState(false);
-    const [pinValues, setPinValues] = useState(defaultPinValues);
+    const [pinValues, setPinValues] = useState([...defaultPinValues]);
     const [apiKey, setApiKey] = useState('');
 
     /**
@@ -22,15 +28,15 @@ const App = () => {
     const handleSignatureModalClose = (signature: string | null) => {
         if (signature) alert('todo: handle signature - ' + JSON.stringify(signature));
         setIsSignaturePadOpen(false);
-        setPinValues(defaultPinValues);
+        setPinValues([...defaultPinValues]);
     };
 
     return (
         <>
             <div className="neu-main">
                 <div className="neu-content">
-                    {pinValues.includes(' ') || pinValues.join('') !== '12345' ? (
-                        <PinPage onChange={(values) => setPinValues(values)} defaultPinValues={defaultPinValues} />
+                    {pinValues.includes(' ') ? (
+                        <PinPage onPinEntered={(values) => setPinValues(values)} pinValues={pinValues} />
                     ) : (
                         <SignaturePage
                             clientName={clientName}
@@ -45,10 +51,7 @@ const App = () => {
                 onClose={(imgPngString) => handleSignatureModalClose(imgPngString)}
             />
 
-            <LoginModal
-                onClose={(apiKey) => setApiKey(apiKey || '')}
-                show={apiKey === ''}
-            />
+            <LoginModal authenticationManager={am} onClose={(apiKey) => setApiKey(apiKey || '')} show={apiKey === ''} />
         </>
     );
 };
