@@ -1,8 +1,9 @@
 import {CLOSE_SOURCE, Modal, ModalBody, ModalHeader, ROLE, SIZE} from 'baseui/modal';
-import {IAuthManager} from "managers/authManager";
+import {KIND, Notification} from 'baseui/notification';
+import {IAuthManager} from 'managers/authManager';
 import React, {useEffect, useState} from 'react';
-import {ReactComponent as LockIcon} from './icons/lock.svg';
-import {ReactComponent as UserIcon} from './icons/user.svg';
+import {ReactComponent as LockIcon} from 'icons/lock.svg';
+import {ReactComponent as UserIcon} from 'icons/user.svg';
 
 interface IProps {
     authenticationManager: IAuthManager;
@@ -20,6 +21,7 @@ const LoginModal = (props: IProps) => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
 
     /**
      * Fires when the user clicks on the login button
@@ -31,10 +33,9 @@ const LoginModal = (props: IProps) => {
                 onClose(auth.apiKey);
                 setShow(false);
             } else {
-                // TODO: Build out actual alert
-                alert('Username or password is incorrect');
+                setShowAlert(true);
             }
-        }
+        };
         validateCredentials();
     };
 
@@ -52,7 +53,9 @@ const LoginModal = (props: IProps) => {
             unstable_ModalBackdropScroll={true}
         >
             <div className="neu-main">
-                <ModalHeader><h2 className="neu-field">Login</h2> </ModalHeader>
+                <ModalHeader>
+                    <h2 className="neu-field">Login</h2>{' '}
+                </ModalHeader>
             </div>
             <div className="neu-main">
                 <ModalBody>
@@ -82,12 +85,21 @@ const LoginModal = (props: IProps) => {
                                     value={password}
                                 />
                             </div>
+                            {showAlert && (
+                                <Notification closeable={true} kind={KIND.warning}>
+                                    Username or password is not correct
+                                </Notification>
+                            )}
                         </div>
                     </div>
                 </ModalBody>
             </div>
             <div className="neu-main">
-                <button className="neu-button mb-3" onClick={() => handleLoginClick()}>
+                <button
+                    className="neu-button mb-3"
+                    onClick={() => handleLoginClick()}
+                    disabled={password === '' || username === ''}
+                >
                     Login
                 </button>
             </div>

@@ -1,19 +1,19 @@
-import LoginModal from 'LoginModal';
+import LoginModal from 'Pages/LoginModal';
 import {IAuthManager} from "managers/authManager";
 import React, {useState} from 'react';
-import SignaturePad from 'SignaturePad';
-import PinPage from './PinPage';
-import SignaturePage from './SignaturePage';
-import './styles/neumorphism.css';
+import SignaturePad from 'Pages/SignaturePad';
+import PinPage from 'Pages/PinPage';
+import SignaturePage from 'Pages/SignaturePage';
+import 'styles/neumorphism.css';
 
 interface IProps {
     authenticationManager: IAuthManager;
 }
 /**
- * App entry point
+ * Landing Page entry point
  * @param {IProps} props The props for this component
  */
-const App = (props: IProps) => {
+const LandingPage = (props: IProps) => {
     const am = props.authenticationManager;
     const clientName = 'Arthur Frankel';
     const defaultPinValues = [' ', ' ', ' ', ' ', ' '] as Readonly<string[]>;
@@ -56,4 +56,4 @@ const App = (props: IProps) => {
     );
 };
 
-export default App;
+export default LandingPage;
