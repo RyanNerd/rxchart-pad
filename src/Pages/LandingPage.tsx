@@ -34,16 +34,18 @@ const LandingPage = (props: IProps) => {
     return (
         <>
             <div className="neu-main">
-                <div className="neu-content">
-                    {pinValues.includes(' ') ? (
-                        <PinPage onPinEntered={(values) => setPinValues(values)} pinValues={pinValues} />
-                    ) : (
-                        <SignaturePage
-                            clientName={clientName}
-                            onShowSignatureModal={() => setIsSignaturePadOpen(true)}
-                        />
-                    )}
-                </div>
+                {apiKey &&
+                    <div className="neu-content">
+                        {pinValues.includes(' ') ? (
+                            <PinPage onPinEntered={(values) => setPinValues(values)} pinValues={pinValues}/>
+                        ) : (
+                            <SignaturePage
+                                clientName={clientName}
+                                onShowSignatureModal={() => setIsSignaturePadOpen(true)}
+                            />
+                        )}
+                    </div>
+                }
             </div>
 
             <SignaturePad
