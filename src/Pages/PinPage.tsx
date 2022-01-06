@@ -1,3 +1,4 @@
+import {IPinData, IPinProvider} from "api/providers/pinProvider";
 import {SIZE} from 'baseui/input';
 import {KIND, Notification} from 'baseui/notification';
 import {PinCode} from 'baseui/pin-code';
@@ -5,7 +6,8 @@ import React, {useEffect, useState} from 'react';
 
 interface IProps {
     pinValues: string[];
-    onPinEntered: (pin: string[]) => void;
+    onPinEntered: (pinInfo: IPinData) => void;
+    pinManager: IPinProvider;
 }
 
 /**
@@ -18,43 +20,50 @@ const PinPage = (props: IProps) => {
         setPinValues(props.pinValues);
     },[props.pinValues])
 
+    const pinManager = props.pinManager;
+    const onPinEntered = props.onPinEntered;
+
+    const [searchPinValue, setSearchPinValue] = useState('')
+    const searchPin = async (pin: string[]) => {
+        const pinData = await pinManager.authenticate(pin.join(''));
+        if (pinData !== null) {
+            setSearchPinValue(pinData.pin_info.PinValue)
+            onPinEntered(pinData);
+        } else {
+            setSearchPinValue('');
+        }
+    }
+
+    useEffect(() => {
+        if (!pinValues.includes(' ')) {
+            searchPin(pinValues);
+        }
+    })
+
     /**
      * Fires when the user clicks the Reset button
      */
     const reset = () => {
-        setPinValues([' ', ' ', ' ', ' ', ' ']);
+        setPinValues([' ', ' ', ' ', ' ', ' ', ' ']);
         const pinEntry = document.getElementById('pin-entry-0');
         if (pinEntry) {
             pinEntry.focus();
         }
     };
 
-    /**
-     * Fires when the user enters a PIN value
-     * @param {string[]} pinValues The string of pin values as an array
-     */
-    const handleOnChange = (pinValues: string[]) => {
-        setPinValues(pinValues);
-        if (!pinValues.includes(' ')) {
-            if (pinValues.join('') === '12345') {
-                props.onPinEntered(pinValues);
-            }
-        }
-    };
-
     return (
         <div className="pin">
-            <div className="neu-field text px-4">Enter the 5-digit PIN</div>
+            <div className="neu-field text px-4">Enter the 6-digit PIN</div>
 
             <div>
                 <PinCode
                     id="pin-entry"
                     autoFocus
-                    onChange={({values}) => handleOnChange(values)}
+                    onChange={({values}) => setPinValues(values)}
                     values={pinValues}
                     size={SIZE.large}
                 />
-                {!pinValues.includes(' ') && pinValues.join('') !== '12345' && (
+                {!pinValues.includes(' ') && pinValues.join('') !== searchPinValue && (
                     <>
                         <Notification kind={KIND.warning}>PIN is invalid. Reset and try again.</Notification>
 

@@ -1,5 +1,4 @@
-import LoginModal from 'Pages/LoginModal';
-import {IAuthManager} from "managers/authManager";
+import pinProvider, {IPinData} from 'api/providers/pinProvider';
 import React, {useState} from 'react';
 import SignaturePad from 'Pages/SignaturePad';
 import PinPage from 'Pages/PinPage';
@@ -7,19 +6,18 @@ import SignaturePage from 'Pages/SignaturePage';
 import 'styles/neumorphism.css';
 
 interface IProps {
-    authenticationManager: IAuthManager;
+    baseUrl: string;
 }
 /**
  * Landing Page entry point
  * @param {IProps} props The props for this component
  */
 const LandingPage = (props: IProps) => {
-    const am = props.authenticationManager;
-    const clientName = 'Arthur Frankel';
-    const defaultPinValues = [' ', ' ', ' ', ' ', ' '] as Readonly<string[]>;
+    const pinManager = pinProvider(props.baseUrl);
+    const defaultPinValues = [' ', ' ', ' ', ' ', ' ', ' '] as Readonly<string[]>;
     const [isSignaturePadOpen, setIsSignaturePadOpen] = useState(false);
     const [pinValues, setPinValues] = useState([...defaultPinValues]);
-    const [apiKey, setApiKey] = useState('');
+    const [pinData, setPinData] = useState<IPinData | null>(null);
 
     /**
      * This fires when the user closes the signature modal
@@ -29,31 +27,32 @@ const LandingPage = (props: IProps) => {
         if (signature) alert('todo: handle signature - ' + JSON.stringify(signature));
         setIsSignaturePadOpen(false);
         setPinValues([...defaultPinValues]);
+        setPinData(null);
     };
 
     return (
         <>
             <div className="neu-main">
-                {apiKey &&
-                    <div className="neu-content">
-                        {pinValues.includes(' ') ? (
-                            <PinPage onPinEntered={(values) => setPinValues(values)} pinValues={pinValues}/>
-                        ) : (
-                            <SignaturePage
-                                clientName={clientName}
-                                onShowSignatureModal={() => setIsSignaturePadOpen(true)}
-                            />
-                        )}
-                    </div>
-                }
+                <div className="neu-content">
+                    {pinData === null ? (
+                        <PinPage
+                            onPinEntered={(pd) => setPinData(pd)}
+                            pinValues={pinValues}
+                            pinManager={pinManager}
+                        />
+                    ) : (
+                        <SignaturePage
+                            pinData={pinData}
+                            onShowSignatureModal={() => setIsSignaturePadOpen(true)}
+                        />
+                    )}
+                </div>
             </div>
 
             <SignaturePad
                 show={isSignaturePadOpen}
                 onClose={(imgPngString) => handleSignatureModalClose(imgPngString)}
             />
-
-            <LoginModal authenticationManager={am} onClose={(apiKey) => setApiKey(apiKey || '')} show={apiKey === ''} />
         </>
     );
 };

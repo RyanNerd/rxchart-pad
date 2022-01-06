@@ -1,7 +1,8 @@
+import {IPinData} from "api/providers/pinProvider";
 import React from 'react';
 
 interface IProps {
-    clientName: string;
+    pinData: IPinData;
     onShowSignatureModal: () => void;
 }
 
@@ -10,11 +11,16 @@ interface IProps {
  * @param {IProps} props The props for this component
  */
 const SignaturePage = (props: IProps) => {
+    console.log('pinData', props.pinData);
     const today = new Date().toLocaleString();
+    const pinData = props.pinData;
+    const clientName = pinData.client_info.first_name.trim() + ' ' + pinData.client_info.last_name.trim();
+    const organization = pinData.organization.trim();
+
     return (
         <div className="signature">
             <p className="text">
-                I, {props.clientName} as a resident of Switchpoint, I declare that I am leaving for the day and verify
+                I, {clientName} as a resident of {organization}, I declare that I am leaving for the day and verify
                 that I have a prescription medication dose that needs to be administered during this time.
                 <br />
                 I take full responsibility for my medication while I am away from the Switchpoint facility and attest
