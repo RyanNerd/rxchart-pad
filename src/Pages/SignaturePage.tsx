@@ -1,4 +1,4 @@
-import {IPinData} from "api/providers/pinProvider";
+import {IPinData} from "api/managers/PinManager";
 import React from 'react';
 
 interface IProps {
@@ -11,7 +11,6 @@ interface IProps {
  * @param {IProps} props The props for this component
  */
 const SignaturePage = (props: IProps) => {
-    console.log('pinData', props.pinData);
     const today = new Date().toLocaleString();
     const pinData = props.pinData;
     const clientName = pinData.client_info.first_name.trim() + ' ' + pinData.client_info.last_name.trim();

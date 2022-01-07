@@ -1,19 +1,20 @@
-import pinProvider, {IPinData} from 'api/providers/pinProvider';
-import React, {useState} from 'react';
-import SignaturePad from 'Pages/SignaturePad';
+import PinManager, {IPinData} from "api/managers/PinManager";
 import PinPage from 'Pages/PinPage';
+import SignaturePad from 'Pages/SignaturePad';
 import SignaturePage from 'Pages/SignaturePage';
+import React, {useState} from 'react';
 import 'styles/neumorphism.css';
 
 interface IProps {
-    baseUrl: string;
+    PinManager: PinManager;
 }
+
 /**
  * Landing Page entry point
- * @param {IProps} props The props for this component
+ * @param {IProps} props Props for this component
  */
 const LandingPage = (props: IProps) => {
-    const pinManager = pinProvider(props.baseUrl);
+    const pinManager = props.PinManager;
     const defaultPinValues = [' ', ' ', ' ', ' ', ' ', ' '] as Readonly<string[]>;
     const [isSignaturePadOpen, setIsSignaturePadOpen] = useState(false);
     const [pinValues, setPinValues] = useState([...defaultPinValues]);
@@ -24,10 +25,25 @@ const LandingPage = (props: IProps) => {
      * @param {boolean} signature True if user accepted the signature, false otherwise.
      */
     const handleSignatureModalClose = (signature: string | null) => {
-        if (signature) alert('todo: handle signature - ' + JSON.stringify(signature));
-        setIsSignaturePadOpen(false);
-        setPinValues([...defaultPinValues]);
-        setPinData(null);
+        const saveSignature = async (signatureImage: string) => {
+            alert('Signature Image Len: ' + signatureImage.length);
+            if (pinData) {
+                const pinInfo = {...pinData.pin_info};
+                pinInfo.Image = signatureImage;
+                const pinResponse = await pinManager.update(pinInfo);
+                if (pinResponse.success) {
+                    setIsSignaturePadOpen(false);
+                    setPinValues([...defaultPinValues]);
+                    setPinData(null);
+                } else {
+                    // todo: display actual soft error or log it or do something when failure occurs
+                    console.log('pinResponse', pinResponse);
+                    alert('Soft Error: ' + JSON.stringify(pinResponse));
+                }
+            }
+        }
+
+        if (signature) saveSignature(signature)
     };
 
     return (

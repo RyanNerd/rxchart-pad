@@ -1,4 +1,4 @@
-import {IPinData, IPinProvider} from "api/providers/pinProvider";
+import PinManager, {IPinData} from "api/managers/PinManager";
 import {SIZE} from 'baseui/input';
 import {KIND, Notification} from 'baseui/notification';
 import {PinCode} from 'baseui/pin-code';
@@ -7,7 +7,7 @@ import React, {useEffect, useState} from 'react';
 interface IProps {
     pinValues: string[];
     onPinEntered: (pinInfo: IPinData) => void;
-    pinManager: IPinProvider;
+    pinManager: PinManager;
 }
 
 /**
