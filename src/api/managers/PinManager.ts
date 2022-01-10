@@ -38,12 +38,11 @@ export default class PinManager
 {
     private frak = Frak();
     private readonly baseUrl: string;
-    _apiKey = 'yyz';
+    _apiKey = '';
 
     constructor() {
         this.baseUrl = process.env.REACT_APP_BASEURL || '';
         if (this.baseUrl === '') {
-            // todo: What should really happen if we have a hard error?
             throw new Error('The BASEURL environment variable is not set in the .env file or the .env file is missing');
         }
         this.apiKey = '';
@@ -74,7 +73,7 @@ export default class PinManager
             UpdateResponse
         ];
 
-        if (updateError) throw updateError; // todo: What should really happen if we have a hard error?
+        if (updateError) throw updateError;
         return response;
     }
 }
