@@ -34,8 +34,7 @@ export type AuthResponse = {
     success: boolean;
 };
 
-export default class PinManager
-{
+export default class PinManager {
     private frak = Frak();
     private readonly baseUrl: string;
     _apiKey = '';
@@ -48,17 +47,26 @@ export default class PinManager
         this.apiKey = '';
     }
 
-    get apiKey() {return this._apiKey}
-    set apiKey(apiKey) {this._apiKey = apiKey}
+    get apiKey() {
+        return this._apiKey;
+    }
+    set apiKey(apiKey) {
+        this._apiKey = apiKey;
+    }
 
     /**
      * Authenticate via PIN search
      * @param {string} pinValue The string of the pin valuet
      * @returns {Promise<IPinData>} The pin data response
      */
-    async authenticate (pinValue: string): Promise<IPinData | null>  {
+    async authenticate(pinValue: string): Promise<IPinData | null> {
         const uri = this.baseUrl + 'pin/authenticate';
-        const response = await this.frak.post<AuthResponse>(uri, {pin_value: pinValue});
+        const [authError, response] = (await asyncWrapper(
+            this.frak.post<AuthResponse>(uri, {pin_value: pinValue})
+        )) as [unknown, AuthResponse];
+
+        if (authError) throw authError;
+
         if (response.success) {
             const responseData = response.data as IPinData;
             this.apiKey = responseData.api_key;
@@ -66,7 +74,12 @@ export default class PinManager
         } else return null;
     }
 
-    async update (pinRecord: PinRecord): Promise<UpdateResponse> {
+    /**
+     * Update the Pin table
+     * @param {PinRecord} pinRecord The pin object record
+     * @returns {Promise<UpdateResponse>} The response
+     */
+    async update(pinRecord: PinRecord): Promise<UpdateResponse> {
         const uri = this.baseUrl + 'pin/update?api_key=' + this.apiKey;
         const [updateError, response] = (await asyncWrapper(this.frak.post<UpdateResponse>(uri, pinRecord))) as [
             unknown,

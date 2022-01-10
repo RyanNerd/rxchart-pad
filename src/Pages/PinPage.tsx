@@ -1,4 +1,4 @@
-import PinManager, {IPinData} from "api/managers/PinManager";
+import PinManager, {IPinData} from 'api/managers/PinManager';
 import {SIZE} from 'baseui/input';
 import {KIND, Notification} from 'baseui/notification';
 import {PinCode} from 'baseui/pin-code';
@@ -8,6 +8,7 @@ interface IProps {
     pinValues: string[];
     onPinEntered: (pinInfo: IPinData) => void;
     pinManager: PinManager;
+    onError: (error: unknown) => void;
 }
 
 /**
@@ -18,27 +19,30 @@ const PinPage = (props: IProps) => {
     const [pinValues, setPinValues] = useState(props.pinValues);
     useEffect(() => {
         setPinValues(props.pinValues);
-    },[props.pinValues])
+    }, [props.pinValues]);
 
     const pinManager = props.pinManager;
     const onPinEntered = props.onPinEntered;
+    const onError = props.onError;
 
-    const [searchPinValue, setSearchPinValue] = useState('')
+    const [searchPinValue, setSearchPinValue] = useState('');
     const searchPin = async (pin: string[]) => {
-        const pinData = await pinManager.authenticate(pin.join(''));
-        if (pinData !== null) {
-            setSearchPinValue(pinData.pin_info.PinValue)
-            onPinEntered(pinData);
-        } else {
-            setSearchPinValue('');
+        try {
+            const pinData = await pinManager.authenticate(pin.join(''));
+            if (pinData !== null) {
+                setSearchPinValue(pinData.pin_info.PinValue);
+                onPinEntered(pinData);
+            } else {
+                setSearchPinValue('');
+            }
+        } catch (error: unknown) {
+            onError(error);
         }
-    }
+    };
 
     useEffect(() => {
-        if (!pinValues.includes(' ')) {
-            searchPin(pinValues);
-        }
-    })
+        if (!pinValues.includes(' ')) searchPin(pinValues);
+    });
 
     /**
      * Fires when the user clicks the Reset button
@@ -46,9 +50,7 @@ const PinPage = (props: IProps) => {
     const reset = () => {
         setPinValues([' ', ' ', ' ', ' ', ' ', ' ']);
         const pinEntry = document.getElementById('pin-entry-0');
-        if (pinEntry) {
-            pinEntry.focus();
-        }
+        if (pinEntry) pinEntry.focus();
     };
 
     return (

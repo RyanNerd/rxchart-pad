@@ -55,7 +55,15 @@ const LandingPage = (props: IProps) => {
     const normal = (
         <>
             {pinData === null ? (
-                <PinPage onPinEntered={(pd) => setPinData(pd)} pinValues={pinValues} pinManager={pinManager} />
+                <PinPage
+                    onPinEntered={(pd) => setPinData(pd)}
+                    pinValues={pinValues}
+                    pinManager={pinManager}
+                    onError={(error) => {
+                        console.log(error);
+                        setErrorDetails(error);
+                    }}
+                />
             ) : (
                 <SignaturePage pinData={pinData} onShowSignatureModal={() => setIsSignaturePadOpen(true)} />
             )}
