@@ -34,6 +34,7 @@ const LandingPage = (props: IProps) => {
                 const pinResponse = await pinManager.update(pinInfo);
                 setIsSignaturePadOpen(false);
                 if (pinResponse.success) {
+                    pinManager.resetApi();
                     setPinValues([...defaultPinValues]);
                     setPinData(null);
                 } else {

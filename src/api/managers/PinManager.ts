@@ -89,4 +89,11 @@ export default class PinManager {
         if (updateError) throw updateError;
         return response;
     }
+
+    /**
+     * Reset the API key to an empty string
+     */
+    public resetApi() {
+        this.apiKey = '';
+    }
 }
