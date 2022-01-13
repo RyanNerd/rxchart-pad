@@ -1,12 +1,12 @@
 import {KIND} from 'baseui/button';
-import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE, CLOSE_SOURCE} from 'baseui/modal';
+import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader, ROLE, SIZE} from 'baseui/modal';
 import React, {useEffect, useRef, useState} from 'react';
 import ReactSignatureCanvas from 'react-signature-canvas';
 import SignatureCanvas from 'react-signature-canvas';
 
 interface IProps {
     show: boolean;
-    onClose: (imgPngString: string | null) => void;
+    onClose: (imgPngString: string) => void;
 }
 
 /**
@@ -37,11 +37,8 @@ const SignaturePad = (props: IProps) => {
         <Modal
             animate
             autoFocus
-            closeable
+            closeable={false}
             isOpen={showSignaturePad}
-            onClose={(closeSource) => {
-                if (closeSource.closeSource !== CLOSE_SOURCE.backdrop) onClose(null);
-            }}
             role={ROLE.dialog}
             size={SIZE.auto}
             unstable_ModalBackdropScroll={true}

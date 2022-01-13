@@ -26,13 +26,13 @@ const LandingPage = (props: IProps) => {
      * This fires when the user closes the signature modal
      * @param {boolean} signature True if user accepted the signature, false otherwise.
      */
-    const handleSignatureModalClose = (signature: string | null) => {
+    const handleSignatureModalClose = (signature: string) => {
         const saveSignature = async (signatureImage: string) => {
             if (pinData) {
                 const pinInfo = {...pinData.pin_info};
                 pinInfo.Image = signatureImage;
                 const pinResponse = await pinManager.update(pinInfo);
-                setIsSignaturePadOpen(false);
+
                 if (pinResponse.success) {
                     pinManager.resetApi();
                     setPinValues([...defaultPinValues]);
@@ -44,8 +44,9 @@ const LandingPage = (props: IProps) => {
             }
         };
 
-        if (signature) saveSignature(signature);
-    };
+        setIsSignaturePadOpen(false);
+        saveSignature(signature);
+    }
 
     const errorNotification = (
         <Notification kind={KIND.warning}>
