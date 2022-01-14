@@ -62,19 +62,19 @@ const LandingPage = (props: IProps) => {
         <>
             {pinData === null ? (
                 <PinPage
-                    onPinEntered={(pd) => setPinData(pd)}
-                    pinValues={pinValues}
-                    pinManager={pinManager}
                     onError={(error) => {
                         console.log(error);
                         setErrorDetails(error);
                     }}
+                    onPinEntered={(pd) => setPinData(pd)}
+                    pinValues={pinValues}
+                    pinManager={pinManager}
                 />
             ) : (
                 <SignaturePage
-                    pinData={pinData}
-                    onShowSignatureModal={() => setIsSignaturePadOpen(true)}
                     onCancel={() => reset()}
+                    onShowSignatureModal={() => setIsSignaturePadOpen(true)}
+                    pinData={pinData}
                 />
             )}
         </>
@@ -87,8 +87,8 @@ const LandingPage = (props: IProps) => {
             </div>
 
             <SignaturePad
-                show={isSignaturePadOpen}
                 onClose={(imgPngString) => handleSignatureModalClose(imgPngString)}
+                show={isSignaturePadOpen}
             />
         </>
     );

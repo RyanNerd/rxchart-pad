@@ -5,27 +5,43 @@ import {PinCode} from 'baseui/pin-code';
 import React, {useEffect, useState} from 'react';
 
 interface IProps {
-    pinValues: string[];
+    onError: (error: unknown) => void;
     onPinEntered: (pinInfo: IPinData) => void;
     pinManager: PinManager;
-    onError: (error: unknown) => void;
+    pinValues: string[];
 }
 
 /**
- * PIN Page
+ * PIN Entry Page
  * @param {IProps} props The props for this component
  */
 const PinPage = (props: IProps) => {
+    /**
+     * Pin-code component lacks a ref prop so we need to use old-fashioned JS and DOM manipulation with a timeout kludge
+     */
+    const focusFirstPin = () => {
+        const pinEntry = document.getElementById('pin-entry-0');
+        setTimeout(() => {
+            pinEntry?.focus();
+        }, 500);
+    };
+
     const [pinValues, setPinValues] = useState(props.pinValues);
     useEffect(() => {
         setPinValues(props.pinValues);
+        focusFirstPin();
     }, [props.pinValues]);
 
     const pinManager = props.pinManager;
     const onPinEntered = props.onPinEntered;
     const onError = props.onError;
-
     const [searchPinValue, setSearchPinValue] = useState('');
+
+    /**
+     * Call the API to authenticate the PIN value
+     * @param {string[]} pin The array of PIN values
+     * @returns {Promise<void>}
+     */
     const searchPin = async (pin: string[]) => {
         try {
             const pinData = await pinManager.authenticate(pin.join(''));
@@ -40,6 +56,7 @@ const PinPage = (props: IProps) => {
         }
     };
 
+    // Kick off a search when pin values are all filled with values
     useEffect(() => {
         if (!pinValues.includes(' ')) searchPin(pinValues);
     });
@@ -49,8 +66,7 @@ const PinPage = (props: IProps) => {
      */
     const reset = () => {
         setPinValues([' ', ' ', ' ', ' ', ' ', ' ']);
-        const pinEntry = document.getElementById('pin-entry-0');
-        if (pinEntry) pinEntry.focus();
+        focusFirstPin();
     };
 
     return (
@@ -59,23 +75,24 @@ const PinPage = (props: IProps) => {
 
             <div>
                 <PinCode
+                    autoFocus={true}
                     id="pin-entry"
-                    autoFocus
                     onChange={({values}) => setPinValues(values)}
-                    values={pinValues}
+                    required={true}
                     size={SIZE.large}
+                    values={pinValues}
                 />
                 {!pinValues.includes(' ') && pinValues.join('') !== searchPinValue && (
                     <>
                         <Notification kind={KIND.warning}>PIN is invalid. Reset and try again.</Notification>
 
                         <button
+                            className="neu-button mt-3"
                             id="reset-pin"
                             onClick={(e) => {
                                 e.preventDefault();
                                 reset();
                             }}
-                            className="neu-button mt-3"
                         >
                             Reset
                         </button>

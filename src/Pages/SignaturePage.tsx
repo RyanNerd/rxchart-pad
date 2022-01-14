@@ -2,9 +2,9 @@ import {IPinData} from "api/managers/PinManager";
 import React from 'react';
 
 interface IProps {
-    pinData: IPinData;
-    onShowSignatureModal: () => void;
     onCancel: () => void;
+    onShowSignatureModal: () => void;
+    pinData: IPinData;
 }
 
 /**
