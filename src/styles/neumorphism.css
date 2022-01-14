@@ -127,7 +127,6 @@
     transform: translateY(-50%);
 }
 
-/*noinspection CssUnusedSymbol*/
 .neu-button {
     margin-left: 10px;
     width: 150px;
@@ -141,6 +140,14 @@
     cursor: pointer;
     border-radius: 25px;
     box-shadow: 2px 2px 5px #babecc, -5px -5px 10px #ffffff73;
+}
+
+.neu-button.secondary {
+    color: #6c84a2;
+    font-size: 12px;
+    font-weight: 300;
+    width: 50px;
+    height: 50px;
 }
 
 .neu-button:focus {

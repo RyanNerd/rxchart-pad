@@ -22,6 +22,12 @@ const LandingPage = (props: IProps) => {
     const [pinData, setPinData] = useState<IPinData | null>(null);
     const [errorDetails, setErrorDetails] = useState<null | unknown>(null);
 
+    const reset = () => {
+        pinManager.resetApi();
+        setPinValues([...defaultPinValues]);
+        setPinData(null);
+    };
+
     /**
      * This fires when the user closes the signature modal
      * @param {boolean} signature True if user accepted the signature, false otherwise.
@@ -34,9 +40,7 @@ const LandingPage = (props: IProps) => {
                 const pinResponse = await pinManager.update(pinInfo);
 
                 if (pinResponse.success) {
-                    pinManager.resetApi();
-                    setPinValues([...defaultPinValues]);
-                    setPinData(null);
+                    reset();
                 } else {
                     console.log('pinResponse', pinResponse);
                     setErrorDetails(pinResponse);
@@ -46,7 +50,7 @@ const LandingPage = (props: IProps) => {
 
         setIsSignaturePadOpen(false);
         saveSignature(signature);
-    }
+    };
 
     const errorNotification = (
         <Notification kind={KIND.warning}>
@@ -67,7 +71,11 @@ const LandingPage = (props: IProps) => {
                     }}
                 />
             ) : (
-                <SignaturePage pinData={pinData} onShowSignatureModal={() => setIsSignaturePadOpen(true)} />
+                <SignaturePage
+                    pinData={pinData}
+                    onShowSignatureModal={() => setIsSignaturePadOpen(true)}
+                    onCancel={() => reset()}
+                />
             )}
         </>
     );
