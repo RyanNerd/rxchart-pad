@@ -7,10 +7,7 @@ export type PinRecord = {
     UserId: number;
     PinValue: string;
     Image: null | string;
-    Created: null | string;
-    Updated: null | string;
-    deleted_at: null | string;
-};
+}
 
 export interface IPinData {
     api_key: string;

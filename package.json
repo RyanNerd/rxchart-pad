@@ -5,8 +5,8 @@
     "dependencies": {
         "baseui": "^10.8.0",
         "frak": "^3.1.5",
-        "react": "rc",
-        "react-dom": "rc",
+        "react": "^18.0.0-rc.0",
+        "react-dom": "^18.0.0-rc.0",
         "react-scripts": "4.0.3",
         "react-signature-canvas": "^1.0.3",
         "styletron-engine-atomic": "latest",

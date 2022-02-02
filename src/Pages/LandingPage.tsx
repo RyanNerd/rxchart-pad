@@ -3,7 +3,8 @@ import {KIND, Notification} from 'baseui/notification';
 import PinPage from 'Pages/PinPage';
 import SignaturePad from 'Pages/SignaturePad';
 import SignaturePage from 'Pages/SignaturePage';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {Tabs, Tab} from 'baseui/tabs-motion';
 import 'styles/neumorphism.css';
 
 interface IProps {
@@ -21,6 +22,8 @@ const LandingPage = (props: IProps) => {
     const [pinValues, setPinValues] = useState([...defaultPinValues]);
     const [pinData, setPinData] = useState<IPinData | null>(null);
     const [errorDetails, setErrorDetails] = useState<null | unknown>(null);
+    const [activeKey, setActiveKey] = useState<React.Key>('pin-entry');
+    const [signatureImage, setSignatureImage] = useState<null | string>(null);
 
     const reset = () => {
         pinManager.resetApi();
@@ -40,7 +43,9 @@ const LandingPage = (props: IProps) => {
                 const pinResponse = await pinManager.update(pinInfo);
 
                 if (pinResponse.success) {
-                    reset();
+                    setSignatureImage(signatureImage);
+                    setActiveKey('final');
+                    // reset();
                 } else {
                     console.log('pinResponse', pinResponse);
                     setErrorDetails(pinResponse);
@@ -58,39 +63,79 @@ const LandingPage = (props: IProps) => {
         </Notification>
     );
 
-    const normal = (
-        <>
-            {pinData === null ? (
-                <PinPage
-                    onError={(error) => {
-                        console.log(error);
-                        setErrorDetails(error);
-                    }}
-                    onPinEntered={(pd) => setPinData(pd)}
-                    pinValues={pinValues}
-                    pinManager={pinManager}
-                />
-            ) : (
-                <SignaturePage
-                    onCancel={() => reset()}
-                    onShowSignatureModal={() => setIsSignaturePadOpen(true)}
-                    pinData={pinData}
-                />
-            )}
-        </>
-    );
+    useEffect(() => {
+        if (pinData === null) {
+            setActiveKey('pin-entry');
+        }
+    }, [pinData])
 
     return (
-        <>
-            <div className="neu-main">
-                <div className="neu-content">{errorDetails === null ? normal : errorNotification}</div>
-            </div>
+        <Tabs activeKey={activeKey} onChange={({activeKey}) => setActiveKey(activeKey)}>
+            <Tab key="pin-entry" title="Pin Entry">
+                <div className="neu-main">
+                    <div className="neu-content">
+                        <PinPage
+                            onError={(error) => {
+                                console.log(error);
+                                setErrorDetails(error);
+                            }}
+                            onPinEntered={(pd) => {
+                                setPinData(pd);
+                                setActiveKey('terms');
+                            }}
+                            pinValues={pinValues}
+                            pinManager={pinManager}
+                        />
+                    </div>
+                </div>
+            </Tab>
 
-            <SignaturePad
-                onClose={(imgPngString) => handleSignatureModalClose(imgPngString)}
-                show={isSignaturePadOpen}
-            />
-        </>
+            <Tab key="terms" title="Terms" disabled={pinData !== null || activeKey !== 'terms'}>
+                {pinData !== null &&
+                <SignaturePage
+                    onCancel={() => reset()}
+                    onShowSignatureModal={() => {
+                        setIsSignaturePadOpen(true);
+                        setActiveKey('signature-pad')
+                    }}
+                    pinData={pinData}
+                />
+                }
+            </Tab>
+
+            <Tab key="signature-pad" title="Signature Pad" disabled={pinData !== null || activeKey !== 'signature-pad'}>
+                <div className="neu-main">
+                    <div className="neu-content">
+                        <SignaturePad
+                            onClose={(imgPngString) => handleSignatureModalClose(imgPngString)}
+                            show={isSignaturePadOpen}
+                        />
+                    </div>
+                </div>
+            </Tab>
+
+            <Tab key="final" title="Final Acceptance" disabled={pinData !== null || activeKey !== 'final'}>
+                {pinData !== null && signatureImage !== null &&
+                    <SignaturePage
+                        onCancel={() => reset()}
+                        onShowSignatureModal={() => {
+                            setIsSignaturePadOpen(true);
+                            setActiveKey('signature-pad')
+                        }}
+                        pinData={pinData}
+                        image={signatureImage}
+                    />
+                }
+            </Tab>
+
+            <Tab key="error" title="Diagnostics" disabled={errorDetails === null}>
+                <div className="neu-main">
+                    <div className="neu-main">
+                        {errorNotification}
+                    </div>
+                </div>
+            </Tab>
+        </Tabs>
     );
 };
 

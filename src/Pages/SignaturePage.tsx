@@ -5,6 +5,7 @@ interface IProps {
     onCancel: () => void;
     onShowSignatureModal: () => void;
     pinData: IPinData;
+    image?: string;
 }
 
 /**
@@ -16,6 +17,7 @@ const SignaturePage = (props: IProps) => {
     const pinData = props.pinData;
     const clientName = pinData.client_info.first_name.trim() + ' ' + pinData.client_info.last_name.trim();
     const organization = pinData.organization.trim();
+    const signatureImage =props.image || null;
 
     return (
         <div className="signature">
@@ -31,16 +33,23 @@ const SignaturePage = (props: IProps) => {
                 <br />
                 <br />
                 <span className="mt-3">
-                    Signature:
-                    <button
-                        className="neu-button"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            props.onShowSignatureModal();
-                        }}
-                    >
-                        Click to sign
-                    </button>
+                {signatureImage ?
+                    (
+                        <>
+                        <span>Signature: <img src={signatureImage} alt="signature" width="300px" height="65px"/></span>
+                    </>
+                    ) : (
+                        <button
+                            className="neu-button"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                props.onShowSignatureModal();
+                            }}
+                        >
+                            Click to sign
+                        </button>
+                    )
+                }
                 </span>{' '}
                 <span className="ml-3">Date: {today}</span>
 
