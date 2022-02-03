@@ -39,29 +39,22 @@ const LandingPage = (props: IProps) => {
     };
 
     /**
-     * This fires when the user closes the signature modal
-     * @param {boolean} signature True if user accepted the signature, false otherwise.
+     * Save the signature as accepted.
+     * @param {string} signatureImage The PNG data image string
      */
-    const handleSignatureModalClose = (signature: string) => {
-        const saveSignature = async (signatureImage: string) => {
-            if (pinData) {
-                const pinInfo = {...pinData.pin_info};
-                pinInfo.Image = signatureImage;
-                const pinResponse = await pinManager.update(pinInfo);
+    const saveSignature = async (signatureImage: string) => {
+        if (pinData) {
+            const pinInfo = {...pinData.pin_info};
+            pinInfo.Image = signatureImage;
+            const pinResponse = await pinManager.update(pinInfo);
 
-                if (pinResponse.success) {
-                    setSignatureImage(signatureImage);
-                    setActiveKey(ACTION_KEY.FINAL);
-                    // reset();
-                } else {
-                    console.log('pinResponse', pinResponse);
-                    setErrorDetails(pinResponse);
-                }
+            if (pinResponse.success) {
+                setSignatureImage(signatureImage);
+            } else {
+                console.log('pinResponse', pinResponse);
+                setErrorDetails(pinResponse);
             }
-        };
-
-        setIsSignaturePadOpen(false);
-        saveSignature(signature);
+        }
     };
 
     const errorNotification = (
@@ -121,7 +114,11 @@ const LandingPage = (props: IProps) => {
                 <div className="neu-main">
                     <div className="neu-content">
                         <SignaturePad
-                            onClose={(imgPngString) => handleSignatureModalClose(imgPngString)}
+                            onClose={(imgPngString) => {
+                                setIsSignaturePadOpen(false);
+                                setSignatureImage(imgPngString);
+                                setActiveKey(ACTION_KEY.FINAL);
+                            }}
                             show={isSignaturePadOpen}
                         />
                     </div>
@@ -134,9 +131,14 @@ const LandingPage = (props: IProps) => {
                         activeKey={activeKey}
                         onCancel={() => reset()}
                         onButtonClick={(action) => {
-                            if (action === BUTTON_ACTION.Accept) {
+                            if (action === BUTTON_ACTION.Resign) {
                                 setIsSignaturePadOpen(true);
                                 setActiveKey('signature-pad');
+                            }
+
+                            if (action === BUTTON_ACTION.Accept) {
+                                saveSignature(signatureImage);
+                                reset();
                             }
                         }}
                         pinData={pinData}

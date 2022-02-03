@@ -1,11 +1,11 @@
 import {IPinData} from 'api/managers/PinManager';
-import {Button} from 'baseui/button';
 import {ACTION_KEY} from 'Pages/LandingPage';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 export enum BUTTON_ACTION {
     Sign = 'SIGN',
     Accept = 'ACCEPT',
+    Resign = 'RESIGN',
     Cancel = 'CANCEL'
 }
 
@@ -27,29 +27,50 @@ const SignaturePage = (props: IProps) => {
     const clientName = pinData.client_info.first_name.trim() + ' ' + pinData.client_info.last_name.trim();
     const organization = pinData.organization.trim();
     const signatureImage = props.image || null;
+    const onButtonClick = props.onButtonClick;
 
-    const responseButtons = () => {
-        switch (props.activeKey) {
-            case ACTION_KEY.SIGNATURE_PAD:
+    const [activeKey, setActiveKey] = useState(props.activeKey);
+    useEffect(() => setActiveKey(props.activeKey), [props.activeKey]);
+
+    const ResponseButtons = () => {
+        switch (activeKey) {
+            case ACTION_KEY.TERMS:
                 return (
                     <button
                         className="neu-button"
                         onClick={(e) => {
                             e.preventDefault();
-                            props.onButtonClick(BUTTON_ACTION.Sign);
+                            onButtonClick(BUTTON_ACTION.Sign);
                         }}
                     >
                         Click to sign
                     </button>
                 );
-            case ACTION_KEY.TERMS:
-                return <Button>Terms</Button>;
             case ACTION_KEY.FINAL:
                 return (
-                    <span>
-                        Signature: <img src={signatureImage as string} alt="signature" width="300px" height="65px" />
-                    </span>
+                    <>
+                        <button
+                            className="neu-button"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                onButtonClick(BUTTON_ACTION.Accept);
+                            }}
+                        >
+                            Accept
+                        </button>
+                        <button
+                            className="neu-button ml-3"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                onButtonClick(BUTTON_ACTION.Resign);
+                            }}
+                        >
+                            Redo signature
+                        </button>
+                    </>
                 );
+            default:
+                return null;
         }
     };
 
@@ -65,34 +86,21 @@ const SignaturePage = (props: IProps) => {
                 medications back in to the front office, I can be detained and arrested by the police.
                 <br />
                 <br />
-                <span className="mt-3">
-                    {responseButtons}
-
-                    {signatureImage ? (
-                        <>
-                            <span>
-                                Signature: <img src={signatureImage} alt="signature" width="300px" height="65px" />
-                            </span>
-                        </>
-                    ) : (
-                        <button
-                            className="neu-button"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                props.onButtonClick(BUTTON_ACTION.Sign);
-                            }}
-                        >
-                            Click to sign
-                        </button>
-                    )}
-                </span>{' '}
-                <span className="ml-3">Date: {today}</span>
+                {signatureImage && (
+                    <>
+                        <span className="mt-3">
+                            Signature: <img src={signatureImage} alt="signature" width="300px" height="65px" />
+                        </span>{' '}
+                        <span className="ml-3">Date: {today}</span>
+                    </>
+                )}
                 <br />
+                <ResponseButtons />
                 <button
                     className="neu-button secondary mt-3"
                     onClick={(e) => {
                         e.preventDefault();
-                        props.onButtonClick(BUTTON_ACTION.Cancel);
+                        onButtonClick(BUTTON_ACTION.Cancel);
                     }}
                 >
                     Cancel
