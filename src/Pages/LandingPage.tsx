@@ -1,11 +1,18 @@
 import PinManager, {IPinData} from 'api/managers/PinManager';
 import {KIND, Notification} from 'baseui/notification';
+import {Tab, Tabs} from 'baseui/tabs-motion';
 import PinPage from 'Pages/PinPage';
 import SignaturePad from 'Pages/SignaturePad';
-import SignaturePage from 'Pages/SignaturePage';
+import SignaturePage, {BUTTON_ACTION} from 'Pages/SignaturePage';
 import React, {useEffect, useState} from 'react';
-import {Tabs, Tab} from 'baseui/tabs-motion';
 import 'styles/neumorphism.css';
+
+export enum ACTION_KEY {
+    FINAL = 'final',
+    PIN_ENTRY = 'pin-entry',
+    SIGNATURE_PAD = 'signature-pad',
+    TERMS = 'terms'
+}
 
 interface IProps {
     PinManager: PinManager;
@@ -22,7 +29,7 @@ const LandingPage = (props: IProps) => {
     const [pinValues, setPinValues] = useState([...defaultPinValues]);
     const [pinData, setPinData] = useState<IPinData | null>(null);
     const [errorDetails, setErrorDetails] = useState<null | unknown>(null);
-    const [activeKey, setActiveKey] = useState<React.Key>('pin-entry');
+    const [activeKey, setActiveKey] = useState<React.Key | ACTION_KEY>(ACTION_KEY.PIN_ENTRY);
     const [signatureImage, setSignatureImage] = useState<null | string>(null);
 
     const reset = () => {
@@ -44,7 +51,7 @@ const LandingPage = (props: IProps) => {
 
                 if (pinResponse.success) {
                     setSignatureImage(signatureImage);
-                    setActiveKey('final');
+                    setActiveKey(ACTION_KEY.FINAL);
                     // reset();
                 } else {
                     console.log('pinResponse', pinResponse);
@@ -65,13 +72,13 @@ const LandingPage = (props: IProps) => {
 
     useEffect(() => {
         if (pinData === null) {
-            setActiveKey('pin-entry');
+            setActiveKey(ACTION_KEY.PIN_ENTRY);
         }
-    }, [pinData])
+    }, [pinData]);
 
     return (
         <Tabs activeKey={activeKey} onChange={({activeKey}) => setActiveKey(activeKey)}>
-            <Tab key="pin-entry" title="Pin Entry">
+            <Tab key={ACTION_KEY.PIN_ENTRY} title="Pin Entry" disabled={activeKey !== ACTION_KEY.PIN_ENTRY}>
                 <div className="neu-main">
                     <div className="neu-content">
                         <PinPage
@@ -90,20 +97,27 @@ const LandingPage = (props: IProps) => {
                 </div>
             </Tab>
 
-            <Tab key="terms" title="Terms" disabled={pinData !== null || activeKey !== 'terms'}>
-                {pinData !== null &&
-                <SignaturePage
-                    onCancel={() => reset()}
-                    onShowSignatureModal={() => {
-                        setIsSignaturePadOpen(true);
-                        setActiveKey('signature-pad')
-                    }}
-                    pinData={pinData}
-                />
-                }
+            <Tab key={ACTION_KEY.TERMS} title="Terms" disabled={pinData !== null || activeKey !== ACTION_KEY.TERMS}>
+                {pinData !== null && (
+                    <SignaturePage
+                        activeKey={activeKey}
+                        onCancel={() => reset()}
+                        onButtonClick={(action) => {
+                            if (action === BUTTON_ACTION.Sign) {
+                                setIsSignaturePadOpen(true);
+                                setActiveKey('signature-pad');
+                            }
+                        }}
+                        pinData={pinData}
+                    />
+                )}
             </Tab>
 
-            <Tab key="signature-pad" title="Signature Pad" disabled={pinData !== null || activeKey !== 'signature-pad'}>
+            <Tab
+                key={ACTION_KEY.SIGNATURE_PAD}
+                title="Signature Pad"
+                disabled={pinData !== null || activeKey !== ACTION_KEY.SIGNATURE_PAD}
+            >
                 <div className="neu-main">
                     <div className="neu-content">
                         <SignaturePad
@@ -115,24 +129,25 @@ const LandingPage = (props: IProps) => {
             </Tab>
 
             <Tab key="final" title="Final Acceptance" disabled={pinData !== null || activeKey !== 'final'}>
-                {pinData !== null && signatureImage !== null &&
+                {pinData !== null && signatureImage !== null && (
                     <SignaturePage
+                        activeKey={activeKey}
                         onCancel={() => reset()}
-                        onShowSignatureModal={() => {
-                            setIsSignaturePadOpen(true);
-                            setActiveKey('signature-pad')
+                        onButtonClick={(action) => {
+                            if (action === BUTTON_ACTION.Accept) {
+                                setIsSignaturePadOpen(true);
+                                setActiveKey('signature-pad');
+                            }
                         }}
                         pinData={pinData}
                         image={signatureImage}
                     />
-                }
+                )}
             </Tab>
 
             <Tab key="error" title="Diagnostics" disabled={errorDetails === null}>
                 <div className="neu-main">
-                    <div className="neu-main">
-                        {errorNotification}
-                    </div>
+                    <div className="neu-main">{errorNotification}</div>
                 </div>
             </Tab>
         </Tabs>
