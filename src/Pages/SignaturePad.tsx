@@ -20,15 +20,15 @@ const SignaturePad = (props: IProps) => {
         setShowSignaturePad(props.show);
     }, [props.show]);
 
-    const signatureRef = useRef<ReactSignatureCanvas>(null);
+    const signatureReference = useRef<ReactSignatureCanvas>(null);
     const [canAccept, setCanAccept] = useState(false);
 
     /**
      * Fires when the user clicks the accept button
      */
     const handleOnAccept = () => {
-        if (signatureRef.current) {
-            const imgData = signatureRef.current.toDataURL('image/png');
+        if (signatureReference.current) {
+            const imgData = signatureReference.current.toDataURL('image/png');
             onClose(imgData);
         }
     };
@@ -43,21 +43,26 @@ const SignaturePad = (props: IProps) => {
             size={SIZE.auto}
             unstable_ModalBackdropScroll={true}
         >
-            <ModalHeader>Using the mouse or touchpad sign below</ModalHeader>
+            <ModalHeader>
+                <span style={{userSelect: 'none'}}>Using the mouse or touchpad sign below</span>
+            </ModalHeader>
             <ModalBody>
                 <SignatureCanvas
                     backgroundColor="#5E687949"
                     canvasProps={{width: 800, height: 350, className: 'signature-canvas'}}
                     penColor="green"
-                    ref={signatureRef}
-                    onBegin={()=> setCanAccept(true)}
+                    ref={signatureReference}
+                    onBegin={() => setCanAccept(true)}
                 />
             </ModalBody>
             <ModalFooter>
-                <ModalButton kind={KIND.secondary} onClick={() => {
-                    signatureRef?.current?.clear()
-                    setCanAccept(false)
-                }}>
+                <ModalButton
+                    kind={KIND.secondary}
+                    onClick={() => {
+                        signatureReference?.current?.clear();
+                        setCanAccept(false);
+                    }}
+                >
                     Clear
                 </ModalButton>
                 <ModalButton kind={KIND.primary} onClick={() => handleOnAccept()} disabled={!canAccept}>

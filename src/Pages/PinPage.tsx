@@ -37,27 +37,26 @@ const PinPage = (props: IProps) => {
     const onError = props.onError;
     const [searchPinValue, setSearchPinValue] = useState('');
 
-    /**
-     * Call the API to authenticate the PIN value
-     * @param {string[]} pin The array of PIN values
-     * @returns {Promise<void>}
-     */
-    const searchPin = async (pin: string[]) => {
-        try {
-            const pinData = await pinManager.authenticate(pin.join(''));
-            if (pinData !== null) {
-                setSearchPinValue(pinData.pin_info.PinValue);
-                onPinEntered(pinData);
-            } else {
-                setSearchPinValue('');
-            }
-        } catch (error: unknown) {
-            onError(error);
-        }
-    };
-
     // Kick off a search when pin values are all filled with values
     useEffect(() => {
+        /**
+         * Call the API to authenticate the PIN value
+         * @param {string[]} pin The array of PIN values
+         * @returns {Promise<void>}
+         */
+        const searchPin = async (pin: string[]) => {
+            try {
+                const pinData = await pinManager.authenticate(pin.join(''));
+                if (pinData !== null) {
+                    setSearchPinValue(pinData.pin_info.PinValue);
+                    onPinEntered(pinData);
+                } else {
+                    setSearchPinValue('');
+                }
+            } catch (error: unknown) {
+                onError(error);
+            }
+        };
         if (!pinValues.includes(' ')) searchPin(pinValues);
     });
 

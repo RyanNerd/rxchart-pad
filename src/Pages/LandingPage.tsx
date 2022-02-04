@@ -4,7 +4,7 @@ import {Tab, Tabs} from 'baseui/tabs-motion';
 import PinPage from 'Pages/PinPage';
 import SignaturePad from 'Pages/SignaturePad';
 import SignaturePage, {BUTTON_ACTION} from 'Pages/SignaturePage';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import 'styles/neumorphism.css';
 
 export enum ACTION_KEY {
@@ -32,20 +32,25 @@ const LandingPage = (props: IProps) => {
     const [activeKey, setActiveKey] = useState<React.Key | ACTION_KEY>(ACTION_KEY.PIN_ENTRY);
     const [signatureImage, setSignatureImage] = useState<null | string>(null);
 
+    /**
+     * Reset everything and activate the pin entry tab
+     */
     const reset = () => {
         pinManager.resetApi();
         setPinValues([...defaultPinValues]);
         setPinData(null);
+        setActiveKey(ACTION_KEY.PIN_ENTRY);
     };
 
     /**
-     * Save the signature as accepted.
+     * Save the signature as accepted and scramble the pin value
      * @param {string} signatureImage The PNG data image string
      */
     const saveSignature = async (signatureImage: string) => {
         if (pinData) {
             const pinInfo = {...pinData.pin_info};
             pinInfo.Image = signatureImage;
+            pinInfo.PinValue = Math.random().toString(36).slice(2, 5) + Math.random().toString(36).slice(2, 5);
             const pinResponse = await pinManager.update(pinInfo);
 
             if (pinResponse.success) {
@@ -56,18 +61,6 @@ const LandingPage = (props: IProps) => {
             }
         }
     };
-
-    const errorNotification = (
-        <Notification kind={KIND.warning}>
-            An error has occurred. Check the internet connection or console log
-        </Notification>
-    );
-
-    useEffect(() => {
-        if (pinData === null) {
-            setActiveKey(ACTION_KEY.PIN_ENTRY);
-        }
-    }, [pinData]);
 
     return (
         <Tabs activeKey={activeKey} onChange={({activeKey}) => setActiveKey(activeKey)}>
@@ -94,11 +87,14 @@ const LandingPage = (props: IProps) => {
                 {pinData !== null && (
                     <SignaturePage
                         activeKey={activeKey}
-                        onCancel={() => reset()}
                         onButtonClick={(action) => {
                             if (action === BUTTON_ACTION.Sign) {
                                 setIsSignaturePadOpen(true);
-                                setActiveKey('signature-pad');
+                                setActiveKey(ACTION_KEY.SIGNATURE_PAD);
+                            }
+
+                            if (action === BUTTON_ACTION.Cancel) {
+                                reset();
                             }
                         }}
                         pinData={pinData}
@@ -129,16 +125,21 @@ const LandingPage = (props: IProps) => {
                 {pinData !== null && signatureImage !== null && (
                     <SignaturePage
                         activeKey={activeKey}
-                        onCancel={() => reset()}
                         onButtonClick={(action) => {
-                            if (action === BUTTON_ACTION.Resign) {
-                                setIsSignaturePadOpen(true);
-                                setActiveKey('signature-pad');
-                            }
+                            switch (action) {
+                                case BUTTON_ACTION.Resign:
+                                    setIsSignaturePadOpen(true);
+                                    setActiveKey(ACTION_KEY.SIGNATURE_PAD);
+                                    break;
 
-                            if (action === BUTTON_ACTION.Accept) {
-                                saveSignature(signatureImage);
-                                reset();
+                                case BUTTON_ACTION.Accept:
+                                    saveSignature(signatureImage);
+                                    reset();
+                                    break;
+
+                                case BUTTON_ACTION.Cancel:
+                                    reset();
+                                    break;
                             }
                         }}
                         pinData={pinData}
@@ -149,7 +150,11 @@ const LandingPage = (props: IProps) => {
 
             <Tab key="error" title="Diagnostics" disabled={errorDetails === null}>
                 <div className="neu-main">
-                    <div className="neu-main">{errorNotification}</div>
+                    <div className="neu-main">
+                        <Notification kind={KIND.warning}>
+                            An error has occurred. Check the internet connection and console log
+                        </Notification>
+                    </div>
                 </div>
             </Tab>
         </Tabs>

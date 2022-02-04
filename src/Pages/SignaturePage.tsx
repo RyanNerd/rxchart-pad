@@ -11,7 +11,6 @@ export enum BUTTON_ACTION {
 
 interface IProps {
     activeKey: ACTION_KEY | React.Key;
-    onCancel: () => void;
     onButtonClick: (buttonAction: BUTTON_ACTION) => void;
     pinData: IPinData;
     image?: string;
@@ -32,6 +31,9 @@ const SignaturePage = (props: IProps) => {
     const [activeKey, setActiveKey] = useState(props.activeKey);
     useEffect(() => setActiveKey(props.activeKey), [props.activeKey]);
 
+    /**
+     * Depending on the ACTION_KEY determine what buttons to render
+     */
     const ResponseButtons = () => {
         switch (activeKey) {
             case ACTION_KEY.TERMS:
@@ -75,7 +77,7 @@ const SignaturePage = (props: IProps) => {
     };
 
     return (
-        <div className="signature">
+        <div className="neu-content">
             <p className="text">
                 I, {clientName} as a resident of {organization}, I declare that I am leaving for the day and verify that
                 I have a prescription medication dose that needs to be administered during this time.
