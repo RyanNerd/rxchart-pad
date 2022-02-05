@@ -1,3 +1,17 @@
+* 2022-02-04   ⛲ feat Finalized Pin entry tab flow
+* 2022-02-03   ⛲ feat Flow of control improved and the save of the signature only happens if accepted by the user
+* 2022-02-03   ⛲ feat Further development for how LandingPage and the SignaturePage work together
+* 2022-02-02   ⛲ feat LandingPage is now tab based
+* 2022-01-26   👷 build Update React to use RC, and bump up the baseui version to the latest
+* 2022-01-14   ⛲ feat The focus now works on the first PIN digit input when the PinPage renders
+* 2022-01-13   ⛲ feat Allow cancel for signature pad
+* 2022-01-13   🌀 refactor Removal of close button from SignaturePad modal and the logic surrounding it
+* 2022-01-10   🐛 bug Need to reset the API key after a successful signature update
+* 2022-01-10   🌀 refactor Even more error handling
+* 2022-01-10   🌀 refactor Error handling improved
+* 2022-01-08   🌀 refactor Fleshed out the error handling
+* 2022-01-07   🌀 refactor API access and update significantly changed in design
+* 2022-01-06   📓 docs Update History.md
 * 2022-01-06   ⛲ feat PIN entry now connects with API for validation and signature entry
 * 2021-12-31   👗 style Don't display the PIN entry if not logged in
 * 2021-12-31   ⛲ feat Added Alert for when login credentials are invalid
