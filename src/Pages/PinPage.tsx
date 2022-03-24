@@ -17,7 +17,7 @@ interface IProps {
  */
 const PinPage = (props: IProps) => {
     /**
-     * Pin-code component lacks a ref prop so we need to use old-fashioned JS and DOM manipulation with a timeout kludge
+     * Pincode component lacks a ref prop, so we need to use old-fashioned JS and DOM manipulation with a timeout kludge
      */
     const focusFirstPin = () => {
         const pinEntry = document.getElementById('pin-entry-0');
@@ -49,6 +49,7 @@ const PinPage = (props: IProps) => {
                 const pinData = await pinManager.authenticate(pin.join(''));
                 if (pinData !== null) {
                     setSearchPinValue(pinData.pin_info.PinValue);
+                    console.log('med_checkout', pinData.med_checkout);
                     onPinEntered(pinData);
                 } else {
                     setSearchPinValue('');

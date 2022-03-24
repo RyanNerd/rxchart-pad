@@ -1,4 +1,5 @@
 import {IPinData} from 'api/managers/PinManager';
+import {DIVIDER, SIZE, Table} from 'baseui/table-semantic';
 import {ACTION_KEY} from 'Pages/LandingPage';
 import React, {useEffect, useState} from 'react';
 
@@ -76,6 +77,43 @@ const SignaturePage = (props: IProps) => {
         }
     };
 
+    /**
+     * Given a string or Date object return the formatted string of the date: mm/dd/yyyy, hh:mm AM
+     * @param {Date | string} date The date to parse and format
+     * @returns {string} The date in the format of MM/DD/YYYY HH:MM am/pm
+     */
+    const getFormattedDate = (date: Date | string): string => {
+        const dt = typeof date === 'string' ? new Date(date) : date;
+        return dt.toLocaleString('en-US', {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        } as Intl.DateTimeFormatOptions);
+    };
+
+    const DrugCheckoutList = () => {
+        if (!pinData.med_checkout) return null;
+
+        console.log('med_checkout', pinData.med_checkout);
+
+        const drugCheckoutRows = [];
+        for (const r of pinData.med_checkout) {
+            drugCheckoutRows.push([r.Drug, getFormattedDate(new Date(r.Updated)), r.Notes, r.Out]);
+        }
+
+        return (
+            <Table
+                columns={['Drug', 'Date / Time', 'Notes', 'Out']}
+                data={drugCheckoutRows}
+                size={SIZE.compact}
+                divider={DIVIDER.grid}
+            />
+        );
+    };
+
     return (
         <div className="neu-content">
             <p className="text">
@@ -97,6 +135,8 @@ const SignaturePage = (props: IProps) => {
                     </>
                 )}
                 <br />
+                <br />
+                <DrugCheckoutList />
                 <ResponseButtons />
                 <button
                     className="neu-button secondary mt-3"

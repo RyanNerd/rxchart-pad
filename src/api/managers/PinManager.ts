@@ -9,6 +9,14 @@ export type PinRecord = {
     Image: null | string;
 };
 
+export type MedCheckoutInfo = {
+    Drug: string;
+    Id: number;
+    Notes: null | string;
+    Out: number;
+    Updated: Date;
+};
+
 export interface IPinData {
     api_key: string;
     organization: string;
@@ -17,6 +25,7 @@ export interface IPinData {
         first_name: string;
     };
     pin_info: PinRecord;
+    med_checkout: MedCheckoutInfo[];
 }
 
 export type UpdateResponse = {

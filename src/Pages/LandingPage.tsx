@@ -1,6 +1,7 @@
 import PinManager, {IPinData} from 'api/managers/PinManager';
 import {KIND, Notification} from 'baseui/notification';
 import {Tab, Tabs} from 'baseui/tabs-motion';
+import html2canvas from 'html2canvas';
 import PinPage from 'Pages/PinPage';
 import SignaturePad from 'Pages/SignaturePad';
 import SignaturePage, {BUTTON_ACTION} from 'Pages/SignaturePage';
@@ -20,6 +21,7 @@ interface IProps {
 
 /**
  * Landing Page entry point
+ * @link https://html2canvas.hertzen.com/documentation
  * @param {IProps} props Props for this component
  */
 const LandingPage = (props: IProps) => {
@@ -31,6 +33,7 @@ const LandingPage = (props: IProps) => {
     const [errorDetails, setErrorDetails] = useState<null | unknown>(null);
     const [activeKey, setActiveKey] = useState<React.Key | ACTION_KEY>(ACTION_KEY.PIN_ENTRY);
     const [signatureImage, setSignatureImage] = useState<null | string>(null);
+    const [htmlImage, setHtmlImage] = useState<null | string>(null);
 
     /**
      * Reset everything and activate the pin entry tab
@@ -123,29 +126,41 @@ const LandingPage = (props: IProps) => {
 
             <Tab key="final" title="Final Acceptance" disabled={pinData !== null || activeKey !== 'final'}>
                 {pinData !== null && signatureImage !== null && (
-                    <SignaturePage
-                        activeKey={activeKey}
-                        onButtonClick={(action) => {
-                            switch (action) {
-                                case BUTTON_ACTION.Resign:
-                                    setIsSignaturePadOpen(true);
-                                    setActiveKey(ACTION_KEY.SIGNATURE_PAD);
-                                    break;
+                    <div id="final">
+                        <SignaturePage
+                            activeKey={activeKey}
+                            onButtonClick={async (action) => {
+                                switch (action) {
+                                    case BUTTON_ACTION.Resign:
+                                        setIsSignaturePadOpen(true);
+                                        setActiveKey(ACTION_KEY.SIGNATURE_PAD);
+                                        break;
 
-                                case BUTTON_ACTION.Accept:
-                                    saveSignature(signatureImage);
-                                    reset();
-                                    break;
+                                    case BUTTON_ACTION.Accept:
+                                        // eslint-disable-next-line no-case-declarations
+                                        const finalElement = document.getElementById('final');
+                                        if (finalElement) {
+                                            const canvas = await html2canvas(finalElement);
+                                            setHtmlImage(canvas.toDataURL());
+                                            setActiveKey('html');
+                                        }
+                                        saveSignature(signatureImage);
+                                        break;
 
-                                case BUTTON_ACTION.Cancel:
-                                    reset();
-                                    break;
-                            }
-                        }}
-                        pinData={pinData}
-                        image={signatureImage}
-                    />
+                                    case BUTTON_ACTION.Cancel:
+                                        reset();
+                                        break;
+                                }
+                            }}
+                            pinData={pinData}
+                            image={signatureImage}
+                        />
+                    </div>
                 )}
+            </Tab>
+
+            <Tab key="html" title="HTML" disabled={htmlImage === null}>
+                <img src={htmlImage as string} alt="html image" />
             </Tab>
 
             <Tab key="error" title="Diagnostics" disabled={errorDetails === null}>
