@@ -8,6 +8,8 @@ import {Provider as StyletronProvider} from 'styletron-react';
 
 const engine = new Styletron();
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLDivElement);
 try {
     const pinManager = new PinManager();
